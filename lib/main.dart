@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'BRImo App',
+      title: 'SIPADES',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -187,7 +187,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
 
   Future<Map<String, String>> fetchCredentials(String sheetId, String range) async {
-    final url = 'https://sheets.googleapis.com/v4/spreadsheets/$sheetId/values/$range?key=AIzaSyBDNmKHYwvVVcG-VaPBy6uW63nu7ri5rXc';
+    final url = 'https://docs.google.com/spreadsheets/d/145zImHcPjL-IsrVdfB_YVOFXsnnJQkGlYpAHcBv2RGI/edit?usp=sharing/$range?key=AIzaSyBDNmKHYwvVVcG-VaPBy6uW63nu7ri5rXc';
     final response = await http.get(Uri.parse(url));
 
     if (response.statusCode == 200) {
@@ -207,11 +207,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<Map<String, String>> fetchAdminCredentials() async {
-    return await fetchCredentials('145zImHcPjL-IsrVdfB_YVOFXsnnJQkGlYpAHcBv2RGI', 'ADMIN!C2:D');
+    return await fetchCredentials('https://docs.google.com/spreadsheets/d/145zImHcPjL-IsrVdfB_YVOFXsnnJQkGlYpAHcBv2RGI/edit?usp=sharing', 'ADMIN!C2:D');
   }
 
   Future<Map<String, String>> fetchUserCredentials() async {
-    return await fetchCredentials('1A2b3C4d5E6f7G8H9Ij0kLmNOpQrStUvWxYzA1B2C3D4', 'USERS!D2:E');
+    return await fetchCredentials('https://docs.google.com/spreadsheets/d/145zImHcPjL-IsrVdfB_YVOFXsnnJQkGlYpAHcBv2RGI/edit?usp=sharing', 'USERS!D2:E');
   }
 
   void _login() async {
