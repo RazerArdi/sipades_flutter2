@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'google_sheets_service.dart';
+import 'GoogleSheetsServiceLOGIN.dart';
 import 'home_screen.dart';
-import 'package:sipades_flutter2/LupaKataSandi.dart';
+import 'LupaKataSandiORRusername.dart';
+
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool _obscureText = true; // State untuk menyembunyikan/memunculkan password
+  bool _obscureText = true;
   final _googleSheetsService = GoogleSheetsService(sheetId: '145zImHcPjL-IsrVdfB_YVOFXsnnJQkGlYpAHcBv2RGI');
 
   Future<void> _login() async {
@@ -35,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<void> _showDialogAndNavigate(String title, String message, bool isSuccess) async {
     return showDialog<void>(
       context: context,
-      barrierDismissible: false, // Mencegah dismiss dialog dengan men-tap di luar dialog
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
@@ -44,11 +45,11 @@ class _LoginScreenState extends State<LoginScreen> {
             TextButton(
               child: Text('OK'),
               onPressed: () {
-                Navigator.of(context).pop(); // Menutup dialog
+                Navigator.of(context).pop();
                 if (isSuccess) {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()), // Navigasi ke HomeScreen
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
                   );
                 }
               },
@@ -114,10 +115,9 @@ class _LoginScreenState extends State<LoginScreen> {
               SizedBox(height: 10),
               TextButton(
                 onPressed: () {
-                  // Navigasi ke Lupa Password Screen
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => LupaPasswordScreen()),
+                    MaterialPageRoute(builder: (context) => LupaKataSandiORRusername()),
                   );
                 },
                 child: Text(

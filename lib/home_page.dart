@@ -14,7 +14,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: Stack(
         children: <Widget>[
-          // Background image covering the top half
           Positioned(
             top: 0,
             left: 0,
@@ -29,7 +28,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          // Blue background with wave shape for the lower half
           Positioned(
             top: MediaQuery.of(context).size.height / 2,
             left: 0,
@@ -42,7 +40,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          // Content on top of the background
           Center(
             child: SingleChildScrollView(
               child: Column(
@@ -52,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   Image.asset('assets/images/LogoMalang.png', height: 50, width: 50,),
                   SizedBox(height: 370),
                   Text(
-                    'Halo, sobat ngawonggo',
+                    'Halo, Sobat Ngawonggo',
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.bold,

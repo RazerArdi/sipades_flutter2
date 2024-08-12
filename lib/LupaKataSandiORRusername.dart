@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:sipades_flutter2/LupaPasswordScreen.dart';
+import 'package:sipades_flutter2/LupaUsernameScreen.dart';
 
-class LupaPasswordScreen extends StatefulWidget {
+
+
+class LupaKataSandiORRusername extends StatefulWidget {
   @override
-  _LupaPasswordScreenState createState() => _LupaPasswordScreenState();
+  _LupaKataSandiORRusernameState createState() => _LupaKataSandiORRusernameState();
 }
 
-class _LupaPasswordScreenState extends State<LupaPasswordScreen> {
+class _LupaKataSandiORRusernameState extends State<LupaKataSandiORRusername> {
   bool _isUsernameSelected = false;
 
   @override
@@ -37,51 +41,41 @@ class _LupaPasswordScreenState extends State<LupaPasswordScreen> {
               style: TextStyle(fontSize: 14),
             ),
             SizedBox(height: 20),
-            // Opsi Lupa Username
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: RadioListTile(
+            Card(
+              child: ListTile(
+                leading: Radio(
+                  value: true,
+                  groupValue: _isUsernameSelected,
+                  onChanged: (value) {
+                    setState(() {
+                      _isUsernameSelected = value!;
+                    });
+                  },
+                ),
                 title: Text('Lupa Username'),
-                value: true,
-                groupValue: _isUsernameSelected,
-                onChanged: (value) {
-                  setState(() {
-                    _isUsernameSelected = value!;
-                  });
-
-                },
-
-                controlAffinity: ListTileControlAffinity.leading,
+                subtitle: Text(
+                  'Fitur lupa username digunakan untuk melihat kembali username (NIK atau ID KK) yang terdaftar',
+                  style: TextStyle(fontSize: 12),
+                ),
               ),
             ),
-
             SizedBox(height: 20),
-            // Opsi Lupa Password
-            Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blue),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: RadioListTile(
+            Card(
+              child: ListTile(
+                leading: Radio(
+                  value: false,
+                  groupValue: _isUsernameSelected,
+                  onChanged: (value) {
+                    setState(() {
+                      _isUsernameSelected = value!;
+                    });
+                  },
+                ),
                 title: Text('Lupa Password'),
-                value: false,
-                groupValue: _isUsernameSelected,
-                onChanged: (value) {
-                  setState(() {
-                    _isUsernameSelected = value!;
-                  });
-                },
-                controlAffinity: ListTileControlAffinity.leading,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0),
-              child: Text(
-                'Fitur lupa password digunakan untuk membuat password kembali dan membuka blokir Akun BRImo',
-                style: TextStyle(fontSize: 12),
+                subtitle: Text(
+                  'Fitur lupa password digunakan untuk membuat password kembali dan membuka blokir Akun BRImo',
+                  style: TextStyle(fontSize: 12),
+                ),
               ),
             ),
             Spacer(),
@@ -93,11 +87,16 @@ class _LupaPasswordScreenState extends State<LupaPasswordScreen> {
                   padding: EdgeInsets.symmetric(vertical: 15),
                 ),
                 onPressed: () {
-                  // Navigate to the next screen based on the selected option.
                   if (_isUsernameSelected) {
-                    // Navigate to Lupa Username screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LupaUsernameScreen()),
+                    );
                   } else {
-                    // Navigate to Lupa Password screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LupaPasswordScreen()),
+                    );
                   }
                 },
                 child: Text(
