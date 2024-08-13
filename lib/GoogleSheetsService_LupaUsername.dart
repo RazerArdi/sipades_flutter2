@@ -24,7 +24,7 @@ class GoogleSheetsService {
         "auth_uri": "https://accounts.google.com/o/oauth2/auth",
         "token_uri": "https://oauth2.googleapis.com/token",
         "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-        "client_x509_cert_url": "YOUR_CLIENT_CERT_URL"
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sipades%40swift-height-432208-b3.iam.gserviceaccount.com"
       }
     ''');
     final authClient = await clientViaServiceAccount(credentials, scopes);

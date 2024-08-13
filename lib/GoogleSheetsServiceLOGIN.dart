@@ -2,10 +2,10 @@ import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:googleapis_auth/auth_io.dart';
 
 
-class GoogleSheetsService {
+class GoogleSheetsServiceLOGIN {
   final String sheetId;
 
-  GoogleSheetsService({required this.sheetId});
+  GoogleSheetsServiceLOGIN({required this.sheetId});
 
   Future<Map<String, String>> fetchCredentials(String range) async {
     final _credentials = ServiceAccountCredentials.fromJson(r'''
@@ -23,18 +23,24 @@ class GoogleSheetsService {
 
     final sheetsApi = sheets.SheetsApi(_client);
 
-    final response = await sheetsApi.spreadsheets.values.get(sheetId, range);
+    try {
+      final response = await sheetsApi.spreadsheets.values.get(sheetId, range);
+      final rows = response.values;
 
-    final rows = response.values;
-
-    Map<String, String> credentials = {};
-    if (rows != null) {
-      for (var row in rows) {
-        if (row.length >= 2) {
-          credentials[row[0] as String] = row[1] as String;
+      Map<String, String> credentials = {};
+      if (rows != null) {
+        for (var row in rows) {
+          if (row.length >= 2) {
+            credentials[row[0] as String] = row[1] as String;
+          }
         }
       }
+      return credentials;
+    } catch (e) {
+      print('Error fetching data: $e');
+      rethrow;
     }
-    return credentials;
   }
+
+  fetchUserDetails(String username) {}
 }

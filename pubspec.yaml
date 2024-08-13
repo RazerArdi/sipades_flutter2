@@ -71,6 +71,7 @@ flutter:
       - assets/images/aduanmasyarakat.png
       - assets/images/Surat.png
       - assets/images/confused.png
+      - assets/images/user.png
 
 
   # To add assets to your application, add an assets section, like this:
