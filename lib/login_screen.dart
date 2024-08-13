@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'GoogleSheetsServiceLOGIN.dart';
-import 'home_screen.dart';
+import 'AdminHomeScreen.dart';
+import 'UserHomeScreen.dart';
 import 'LupaKataSandiORRusername.dart';
-
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -23,17 +23,19 @@ class _LoginScreenState extends State<LoginScreen> {
       final adminCredentials = await _googleSheetsService.fetchCredentials('ADMIN!C:D');
       final userCredentials = await _googleSheetsService.fetchCredentials('USERS!E:F');
 
-      if (adminCredentials[username] == password || userCredentials[username] == password) {
-        await _showDialogAndNavigate('Login Berhasil', 'Selamat datang, $username!', true);
+      if (adminCredentials[username] == password) {
+        await _showDialogAndNavigate('Login Berhasil', 'Selamat datang, Admin!', true, 'admin');
+      } else if (userCredentials[username] == password) {
+        await _showDialogAndNavigate('Login Berhasil', 'Selamat datang, $username!', true, 'user');
       } else {
-        await _showDialogAndNavigate('Login Gagal', 'Username atau Password Salah!', false);
+        await _showDialogAndNavigate('Login Gagal', 'Username atau Password Salah!', false, '');
       }
     } catch (e) {
-      await _showDialogAndNavigate('Error', 'Terjadi kesalahan: $e', false);
+      await _showDialogAndNavigate('Error', 'Terjadi kesalahan: $e', false, '');
     }
   }
 
-  Future<void> _showDialogAndNavigate(String title, String message, bool isSuccess) async {
+  Future<void> _showDialogAndNavigate(String title, String message, bool isSuccess, String role) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -49,7 +51,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (isSuccess) {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                    MaterialPageRoute(
+                      builder: (context) => role == 'admin'
+                          ? HomeScreen()
+                          : UserHomeScreen(username: _usernameController.text),
+                    ),
                   );
                 }
               },

@@ -41,82 +41,80 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: 20),
-                  Image.asset('assets/images/LogoMalang.png', height: 50, width: 50,),
-                  SizedBox(height: 370),
-                  Text(
-                    'Halo, Sobat Ngawonggo',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(height: 30),
+                Image.asset('assets/images/LogoMalang.png', height: 50, width: 50),
+                Spacer(flex: 50),
+                Text(
+                  'Halo, Sobat Ngawonggo',
+                  style: TextStyle(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-                  SizedBox(height: 5),
-                  Text(
-                    'Beberapa Layanan Kami',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Beberapa Layanan Kami',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
                   ),
-                  SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildMenuItem('assets/images/aduanmasyarakat.png', 'Aduan Masyarakat'),
-                        _buildMenuItem('assets/images/Surat.png', 'Surat/Berkas'),
-                      ],
-                    ),
+                ),
+                SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildMenuItem('assets/images/aduanmasyarakat.png', 'Aduan Masyarakat'),
+                      _buildMenuItem('assets/images/Surat.png', 'Surat/Berkas'),
+                    ],
                   ),
-                  SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildMenuItem('assets/images/registrasipenduduk.png', 'Registrasi Penduduk Baru'),
-                      ],
-                    ),
+                ),
+                SizedBox(height: 16),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      _buildMenuItem('assets/images/registrasipenduduk.png', 'Registrasi Penduduk Baru'),
+                    ],
                   ),
-                  SizedBox(height: 32),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
-                      );
-                    },
-                    child: Text('Login'),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                    ),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+                  },
+                  child: Text('Login'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50),
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                   ),
-                  SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => FingerprintScreen()),
-                      );
-                    },
-                    child: Icon(Icons.fingerprint),
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                    ),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FingerprintScreen()),
+                    );
+                  },
+                  child: Icon(Icons.fingerprint),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 50),
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                   ),
-                  SizedBox(height: 32),
-                ],
-              ),
+                ),
+                SizedBox(height: 32),
+              ],
             ),
           ),
         ],

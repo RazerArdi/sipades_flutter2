@@ -5,10 +5,10 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text('Admin'),
       ),
       body: Center(
-        child: Text('Welcome to the home screen!'),
+        child: Text('Welcome to Admin!'),
       ),
     );
   }
