@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:googleapis_auth/auth_io.dart';
-import 'package:http/http.dart' as http;
 
 class GoogleSheetsService {
   final String sheetId;
@@ -14,7 +13,6 @@ class GoogleSheetsService {
   Future<void> _initializeSheetsApi() async {
     if (_sheetsApi != null) return;
 
-    final client = http.Client();
     final scopes = [sheets.SheetsApi.spreadsheetsScope];
     final credentials = ServiceAccountCredentials.fromJson(r'''
       {
