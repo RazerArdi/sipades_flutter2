@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => role == 'admin'
-                          ? HomeScreen()
+                          ? AdminScreen()
                           : UserHomeScreen(username: _usernameController.text),
                     ),
                   );
