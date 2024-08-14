@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'admin_beranda_screen.dart';
+import 'admin_riwayat_screen.dart';
+import 'admin_bantuan_screen.dart';
+import 'admin_profil_screen.dart';
 
-class AdminScreen extends StatefulWidget {
+class AdminHomeScreen extends StatefulWidget {
   @override
-  _AdminScreenState createState() => _AdminScreenState();
+  _AdminHomeScreenState createState() => _AdminHomeScreenState();
 }
 
-class _AdminScreenState extends State<AdminScreen> {
+class _AdminHomeScreenState extends State<AdminHomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _pages = [
-    Center(child: Text('Beranda Admin')),
-    Center(child: Text('Riwayat Admin')),
-    Center(child: Text('Bantuan Admin')),
-    Center(child: Text('Profil Admin')),
+    AdminBerandaScreen(),
+    AdminRiwayatScreen(),
+    AdminBantuanScreen(),
+    AdminProfilScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -25,13 +29,24 @@ class _AdminScreenState extends State<AdminScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 50.0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.purple, Colors.red, Colors.blue],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: const Text('ADMIN'),
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.transparent, // Make the AppBar background transparent
+        elevation: 0, // Remove shadow for a cleaner look
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.info_outline),
           ),
         ],
       ),

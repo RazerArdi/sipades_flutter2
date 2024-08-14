@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 
-class BantuanScreen extends StatelessWidget {
-  const BantuanScreen({Key? key}) : super(key: key);
+class AdminBantuanScreen extends StatelessWidget {
+  const AdminBantuanScreen({Key? key}) : super(key: key);
 
   Future<bool> _onWillPop(BuildContext context) async {
-
     final shouldExit = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -36,6 +35,10 @@ class BantuanScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () => _onWillPop(context),
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Bantuan Admin'),
+          automaticallyImplyLeading: false, // Remove the back arrow
+        ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -58,13 +61,13 @@ class BantuanScreen extends StatelessWidget {
               const SizedBox(height: 16.0),
               _ContactItem(
                 icon: Icons.phone,
-                label: 'WhatsApp Kami',
+                label: 'WhatsApp Developer',
                 phoneNumber: '6281000000000',
               ),
               const SizedBox(height: 16.0),
               _ContactItem(
                 icon: Icons.email,
-                label: 'Email Kami',
+                label: 'Email Developer',
                 email: 'ngawonggodesa@gmail.com',
               ),
             ],

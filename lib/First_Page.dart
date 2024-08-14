@@ -36,7 +36,13 @@ class _MyHomePageState extends State<MyHomePage> {
             child: CustomPaint(
               painter: WavePainter(),
               child: Container(
-                color: Colors.blue,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.purple, Colors.red, Colors.blue],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
               ),
             ),
           ),

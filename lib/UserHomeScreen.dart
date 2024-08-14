@@ -20,7 +20,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
     BerandaScreen(username: 'username'),
     HistoryScreen(),
     BantuanScreen(),
-    ProfileScreen(username: 'username',),
+    ProfileScreen(username: 'username'),
   ];
 
   void _onItemTapped(int index) {
@@ -33,19 +33,28 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        toolbarHeight: 50.0,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.purple, Colors.red, Colors.blue],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+        ),
         title: const Text('SIPADES'),
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(Icons.shopping_cart),
+            icon: const Icon(Icons.info_outline),
           ),
         ],
       ),
-      body: _selectedIndex == 0
-          ? BerandaScreen(username: widget.username)
-          : _pages[_selectedIndex],
+      body: _pages[_selectedIndex],
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
