@@ -30,11 +30,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: any
+  http: ^1.2.2
   googleapis: any
   googleapis_auth: any
   animated_splash_screen: ^1.0.0+1
   page_transition: ^2.0.0
+  flutter_cache_manager: ^3.4.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -75,6 +76,7 @@ flutter:
       - assets/images/Surat.png
       - assets/images/confused.png
       - assets/images/user.png
+      - assets/images/KITA.png
 
 
   # To add assets to your application, add an assets section, like this:

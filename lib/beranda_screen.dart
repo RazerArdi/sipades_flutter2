@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'SuratDomisiliUsahaScreen.dart';
-import 'N1_N5.dart';
-import 'SuratKematianScreen.dart';
-import 'SuratKelahiranScreen.dart';
-import 'DomisiliHajiScreen.dart';
-import 'SuratUsahaScreen.dart';
-import 'JadwalSholatScreen.dart';
-import 'CuacaScreen.dart';
-import 'EventDesaScreen.dart';
+import 'Layanan/LayananUmum.dart';
+import 'Layanan/LayananNikah.dart';
+import 'Layanan/LayananLainnya.dart';
+import 'Layanan/LayananKependudukan.dart';
+import 'Layanan/LayananPertanahan.dart';
+import 'FiturTambahan/JadwalSholatScreen.dart';
+import 'FiturTambahan/CuacaScreen.dart';
+import 'FiturTambahan/EventDesaScreen.dart';
 
 class BerandaScreen extends StatelessWidget {
   final String username;
@@ -73,7 +72,7 @@ class BerandaScreen extends StatelessWidget {
                   color: Colors.white,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: Colors.grey.withOpacity(1.0),
                       spreadRadius: 2,
                       blurRadius: 5,
                       offset: const Offset(0, 3),
@@ -106,7 +105,7 @@ class BerandaScreen extends StatelessWidget {
                             icon: Icons.mosque,
                             label: 'Jadwal Sholat',
                             iconColor: Colors.green,
-                            backgroundColor: Colors.grey[200]!,
+                            backgroundColor: Colors.grey[300]!,
                             labelColor: Colors.black,
                             onTap: () {
                               Navigator.push(
@@ -124,7 +123,7 @@ class BerandaScreen extends StatelessWidget {
                             icon: Icons.cloud,
                             label: 'Cuaca',
                             iconColor: Colors.blue,
-                            backgroundColor: Colors.grey[200]!,
+                            backgroundColor: Colors.grey[300]!,
                             labelColor: Colors.black,
                             onTap: () {
                               Navigator.push(
@@ -141,7 +140,7 @@ class BerandaScreen extends StatelessWidget {
                             icon: Icons.event,
                             label: 'Event Desa',
                             iconColor: Colors.purple,
-                            backgroundColor: Colors.grey[200]!,
+                            backgroundColor: Colors.grey[300]!,
                             labelColor: Colors.black,
                             onTap: () {
                               Navigator.push(
@@ -168,30 +167,41 @@ class BerandaScreen extends StatelessWidget {
                 children: [
                   _ServiceMenuItem(
                     icon: Icons.business,
-                    label: 'Surat Keterangan Domisili Usaha',
+                    label: 'Layanan Umum',
                     backgroundColor: Colors.blue,
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => SuratDomisiliUsahaScreen()),
+                        MaterialPageRoute(builder: (context) => LayananUmum()),
                       );
                     },
                   ),
                   _ServiceMenuItem(
-                    icon: Icons.cancel,
-                    label: 'Sk Belum Pernah Nikah',
+                    icon: Icons.assignment_ind,
+                    label: 'Layanan Kependudukan',
+                    backgroundColor: Colors.green,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => LayananKependudukan()),
+                      );
+                    },
+                  ),
+                  _ServiceMenuItem(
+                    icon: Icons.favorite,
+                    label: 'Layanan Nikah',
                     backgroundColor: Colors.red,
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => N1N5Screen()),
+                        MaterialPageRoute(builder: (context) => LayananNikah()),
                       );
                     },
                   ),
                   _ServiceMenuItem(
                     icon: Icons.home,
-                    label: 'Surat Keterangan Domisili Haji',
-                    backgroundColor: Colors.green,
+                    label: 'Layanan Pertanahan',
+                    backgroundColor: Colors.purple,
                     onTap: () {
                       Navigator.push(
                         context,
@@ -200,46 +210,13 @@ class BerandaScreen extends StatelessWidget {
                     },
                   ),
                   _ServiceMenuItem(
-                    icon: Icons.list,
-                    label: 'N1-N5',
+                    icon: Icons.person,
+                    label: 'Layanan Lainnya',
                     backgroundColor: Colors.orange,
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => N1N5Screen()),
-                      );
-                    },
-                  ),
-                  _ServiceMenuItem(
-                    icon: Icons.business_center,
-                    label: 'Surat Keterangan Usaha',
-                    backgroundColor: Colors.purple,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SuratUsahaScreen()),
-                      );
-                    },
-                  ),
-                  _ServiceMenuItem(
-                    icon: Icons.assignment,
-                    label: 'Surat Keterangan Kematian',
-                    backgroundColor: Colors.teal,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SuratKematianScreen()),
-                      );
-                    },
-                  ),
-                  _ServiceMenuItem(
-                    icon: Icons.child_care,
-                    label: 'Surat Keterangan Kelahiran',
-                    backgroundColor: Colors.brown,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SuratKelahiranScreen()),
+                        MaterialPageRoute(builder: (context) => LayananLainnya()),
                       );
                     },
                   ),

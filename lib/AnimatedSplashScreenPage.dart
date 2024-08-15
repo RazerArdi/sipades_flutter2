@@ -73,7 +73,7 @@ class SplashScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Text(
-                    'SISTEM PELAYANAN DESA',
+                    'SISTEM PELAYANAN DESA NGAWONGGO',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
@@ -93,7 +93,7 @@ class SplashScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 5),
                   const Text(
-                    'Powered by Program Pengabdian Kepada Masyarakat Oleh Mahasiswa',
+                    'Powered by PMM G8K70 2024 - V1.0',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.normal,

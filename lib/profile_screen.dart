@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'GoogleSheetsServiceLOGIN.dart';
 import 'First_Page.dart';
+import 'CacheManager.dart';
+import 'AboutUsDialog.dart';
+import 'AdminContactDialog.dart';
+import 'FAQScreen.dart';
+import 'PrivacyPolicyScreen.dart'; // Import PrivacyPolicyScreen di sini
 
 class ProfileScreen extends StatefulWidget {
   final String username;
@@ -28,6 +33,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return userDetails;
     } catch (e) {
       return {};
+    }
+  }
+
+  Future<void> _clearCache() async {
+    try {
+      await CacheManager.clearCache();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Cache berhasil dihapus')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Gagal menghapus cache')),
+      );
     }
   }
 
@@ -124,38 +142,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     _buildProfileItem(
                       icon: Icons.delete_sweep,
                       title: 'Hapus Cache',
-                      subtitle: '39.15MB',
                       trailing: const Icon(Icons.arrow_forward_ios),
-                    ),
-                    _buildProfileItem(
-                      icon: Icons.lock,
-                      title: 'Ubah Kata Sandi',
-                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: _clearCache,
                     ),
                     _buildProfileItem(
                       icon: Icons.info,
                       title: 'Tentang Kami',
                       trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AboutUsDialog(),
+                        );
+                      },
                     ),
                     _buildProfileItem(
                       icon: Icons.question_answer,
                       title: 'FAQ',
                       trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => FAQScreen()),
+                        );
+                      },
                     ),
                     _buildProfileItem(
                       icon: Icons.privacy_tip,
                       title: 'Kebijakan Privasi',
                       trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
+                        );
+                      },
                     ),
                     _buildProfileItem(
                       icon: Icons.phone,
                       title: 'Hubungi Kami',
                       trailing: const Icon(Icons.arrow_forward_ios),
-                    ),
-                    _buildProfileItem(
-                      icon: Icons.share,
-                      title: 'Bagikan',
-                      trailing: const Icon(Icons.arrow_forward_ios),
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => AdminContactDialog(),
+                        );
+                      },
                     ),
                     const SizedBox(height: 20),
                     Center(
@@ -184,33 +216,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-}
 
-
-Widget _buildProfileItem({
-  required IconData icon,
-  required String title,
-  String? subtitle,
-  required Widget trailing,
-}) {
-  return Column(
-    children: [
-      ListTile(
-        leading: Icon(icon),
-        title: Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
+  Widget _buildProfileItem({
+    required IconData icon,
+    required String title,
+    String? subtitle,
+    required Widget trailing,
+    void Function()? onTap,
+  }) {
+    return Column(
+      children: [
+        ListTile(
+          leading: Icon(icon),
+          title: Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
           ),
+          subtitle: subtitle != null ? Text(subtitle) : null,
+          trailing: trailing,
+          onTap: onTap,
         ),
-        subtitle: subtitle != null ? Text(subtitle) : null,
-        trailing: trailing,
-      ),
-      const Divider(
-        color: Colors.grey,  // Set the color of the separator line
-        thickness: 1.0,      // Set the thickness of the separator line
-      ),
-    ],
-  );
+        const Divider(
+          color: Colors.grey,
+          thickness: 1.0,
+        ),
+      ],
+    );
+  }
 }
-

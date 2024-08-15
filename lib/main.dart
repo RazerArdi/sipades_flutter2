@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sipades_flutter2/AnimatedSplashScreenPage.dart';
-import 'First_Page.dart';
 
 void main() {
   runApp(MyApp());

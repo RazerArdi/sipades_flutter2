@@ -6,7 +6,6 @@ class BantuanScreen extends StatelessWidget {
   const BantuanScreen({Key? key}) : super(key: key);
 
   Future<bool> _onWillPop(BuildContext context) async {
-
     final shouldExit = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
@@ -60,12 +59,14 @@ class BantuanScreen extends StatelessWidget {
                 icon: Icons.phone,
                 label: 'WhatsApp Kami',
                 phoneNumber: '6281000000000',
+                contactInfo: '6281000000000', // Nomor telepon WhatsApp
               ),
               const SizedBox(height: 16.0),
               _ContactItem(
                 icon: Icons.email,
                 label: 'Email Kami',
                 email: 'ngawonggodesa@gmail.com',
+                contactInfo: 'ngawonggodesa@gmail.com', // Email
               ),
             ],
           ),
@@ -80,6 +81,7 @@ class _ContactItem extends StatelessWidget {
   final String label;
   final String? phoneNumber;
   final String? email;
+  final String contactInfo;
 
   const _ContactItem({
     Key? key,
@@ -87,6 +89,7 @@ class _ContactItem extends StatelessWidget {
     required this.label,
     this.phoneNumber,
     this.email,
+    required this.contactInfo,
   }) : super(key: key);
 
   void _launchURL(String url) async {
@@ -121,13 +124,28 @@ class _ContactItem extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 32.0, color: Colors.purple),
-            const SizedBox(width: 16.0),
+            Row(
+              children: [
+                Icon(icon, size: 32.0, color: Colors.purple),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8.0),
             Text(
-              label,
-              style: const TextStyle(fontSize: 16.0),
+              contactInfo,
+              style: const TextStyle(
+                fontSize: 14.0,
+                color: Colors.black, // Warna teks hitam
+              ),
             ),
           ],
         ),
