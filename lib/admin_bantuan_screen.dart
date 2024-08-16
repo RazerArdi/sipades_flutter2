@@ -37,7 +37,7 @@ class AdminBantuanScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Bantuan Admin'),
-          automaticallyImplyLeading: false, // Remove the back arrow
+          automaticallyImplyLeading: false,
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
