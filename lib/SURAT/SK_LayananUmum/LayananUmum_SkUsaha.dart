@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-import 'GoogleServiceAPI_Kabupaten.dart'; // Ensure this import matches your file structure
+import 'GoogleServiceAPI_Kabupaten.dart';
 
 class LayananUmumSkUsaha extends StatefulWidget {
   @override
@@ -12,12 +12,16 @@ class _LayananUmumSkUsahaState extends State<LayananUmumSkUsaha> {
   String? jenisKelamin;
   String agama = 'Islam';
   String statusPerkawinan = 'Belum Menikah';
-  String? selectedDate; // To hold the selected date
+  String? selectedDate;
 
-  List<String> kabupatenList = []; // Updated to load dynamically
-  bool isLoading = true; // Track loading state
+  List<String> kabupatenList = [];
+  bool isLoading = true;
 
-  final TextEditingController _dateController = TextEditingController(); // Controller for date field
+  final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _nikController = TextEditingController();
+  final TextEditingController _namaController = TextEditingController();
+  final TextEditingController _pekerjaanController = TextEditingController();
+  final TextEditingController _alamatController = TextEditingController();
 
   @override
   void initState() {
@@ -38,7 +42,6 @@ class _LayananUmumSkUsahaState extends State<LayananUmumSkUsaha> {
       setState(() {
         isLoading = false;
       });
-      // Optionally handle the error, e.g., show an error message
     }
   }
 
@@ -52,7 +55,7 @@ class _LayananUmumSkUsahaState extends State<LayananUmumSkUsaha> {
     if (pickedDate != null) {
       setState(() {
         selectedDate = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-        _dateController.text = selectedDate!; // Update the text controller
+        _dateController.text = selectedDate!;
       });
     }
   }
@@ -62,57 +65,46 @@ class _LayananUmumSkUsahaState extends State<LayananUmumSkUsaha> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Surat Keterangan Usaha'),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.redAccent,
+        elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Keterangan Persyaratan:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
               ),
-              const SizedBox(height: 8),
-              const Text('• Surat Pengantar RT & RW'),
-              const Text('• Fotocopy KK'),
-              const Text('• Fotocopy KTP'),
-              const Divider(height: 20, thickness: 2),
+              const SizedBox(height: 12),
+              _buildRequirementText('• Surat Pengantar RT & RW'),
+              _buildRequirementText('• Fotocopy KK'),
+              _buildRequirementText('• Fotocopy KTP'),
+              _buildRequirementText('\nCatatan : Mohon Membawa Persyaratan Berkas Saat Pengambilan Surat'),
+              const Divider(height: 30, thickness: 2),
 
-              const Text('NIK'),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Masukkan NIK',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
+              _buildSectionTitle('NIK'),
+              _buildTextField(_nikController, 'Masukkan NIK'),
 
-              const Text('Nama'),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Masukkan Nama',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
+              _buildSectionTitle('Nama'),
+              _buildTextField(_namaController, 'Masukkan Nama'),
 
-              const Text('Tempat, Tanggal Lahir'),
+              _buildSectionTitle('Tempat, Tanggal Lahir'),
               Row(
                 children: [
                   Expanded(
                     child: isLoading
                         ? Center(child: CircularProgressIndicator())
                         : DropdownSearch<String>(
-                      popupProps: PopupProps.menu(
-                        showSearchBox: true,
-                      ),
+                      popupProps: PopupProps.menu(showSearchBox: true),
                       items: kabupatenList,
                       dropdownDecoratorProps: DropDownDecoratorProps(
                         dropdownSearchDecoration: InputDecoration(
                           labelText: "Pilih Kabupaten",
                           border: OutlineInputBorder(),
+                          contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                         ),
                       ),
                       onChanged: (value) {
@@ -133,6 +125,7 @@ class _LayananUmumSkUsahaState extends State<LayananUmumSkUsaha> {
                           decoration: InputDecoration(
                             hintText: 'Pilih Tanggal',
                             border: OutlineInputBorder(),
+                            contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                           ),
                         ),
                       ),
@@ -142,7 +135,7 @@ class _LayananUmumSkUsahaState extends State<LayananUmumSkUsaha> {
               ),
               const SizedBox(height: 16),
 
-              const Text('Jenis Kelamin'),
+              _buildSectionTitle('Jenis Kelamin'),
               Row(
                 children: [
                   Expanded(
@@ -173,20 +166,14 @@ class _LayananUmumSkUsahaState extends State<LayananUmumSkUsaha> {
               ),
               const SizedBox(height: 16),
 
-              const Text('Agama'),
+              _buildSectionTitle('Agama'),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                 ),
                 value: agama,
-                items: <String>[
-                  'Islam',
-                  'Kristen',
-                  'Katolik',
-                  'Hindu',
-                  'Buddha',
-                  'Konghucu'
-                ].map((String value) {
+                items: ['Islam', 'Kristen', 'Katolik', 'Hindu', 'Buddha', 'Konghucu'].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -200,18 +187,14 @@ class _LayananUmumSkUsahaState extends State<LayananUmumSkUsaha> {
               ),
               const SizedBox(height: 16),
 
-              const Text('Status Perkawinan'),
+              _buildSectionTitle('Status Perkawinan'),
               DropdownButtonFormField<String>(
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
+                  contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
                 ),
                 value: statusPerkawinan,
-                items: <String>[
-                  'Belum Menikah',
-                  'Menikah',
-                  'Cerai Hidup',
-                  'Cerai Mati'
-                ].map((String value) {
+                items: ['Belum Menikah', 'Menikah', 'Cerai Hidup', 'Cerai Mati'].map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Text(value),
@@ -225,38 +208,65 @@ class _LayananUmumSkUsahaState extends State<LayananUmumSkUsaha> {
               ),
               const SizedBox(height: 16),
 
-              const Text('Pekerjaan'),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Masukkan Pekerjaan',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              const SizedBox(height: 16),
+              _buildSectionTitle('Pekerjaan'),
+              _buildTextField(_pekerjaanController, 'Masukkan Pekerjaan'),
 
-              const Text('Alamat'),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: 'Masukkan Alamat',
-                  border: OutlineInputBorder(),
-                ),
-                maxLines: 3,
-              ),
-              const SizedBox(height: 20),
+              _buildSectionTitle('Alamat'),
+              _buildTextField(_alamatController, 'Masukkan Alamat', maxLines: 3),
 
+              const SizedBox(height: 30),
               Center(
                 child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
+                    backgroundColor: Colors.redAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
                   onPressed: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Data berhasil dikirim!')),
                     );
                   },
-                  child: const Text('Kirim'),
+                  child: const Text('Kirim', style: TextStyle(fontSize: 16)),
                 ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+      ),
+    );
+  }
+
+  Widget _buildTextField(TextEditingController controller, String hintText, {int maxLines = 1}) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hintText,
+        border: OutlineInputBorder(),
+        contentPadding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 10.0),
+      ),
+      maxLines: maxLines,
+    );
+  }
+
+  Widget _buildRequirementText(String text) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6.0),
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 16),
       ),
     );
   }

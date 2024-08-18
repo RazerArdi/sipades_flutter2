@@ -28,6 +28,17 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
+
+          Positioned(
+            top: 40,
+            left: 0,
+            right: 0,
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Image.asset('assets/images/LogoMalang.png', height: 50, width: 50),
+            ),
+          ),
+
           Positioned(
             top: MediaQuery.of(context).size.height / 2,
             left: 0,
@@ -46,13 +57,14 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ),
           ),
-          Center(
+
+          Positioned(
+            top: MediaQuery.of(context).size.height / 2,
+            left: 0,
+            right: 0,
+            bottom: 0,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(height: 30),
-                Image.asset('assets/images/LogoMalang.png', height: 50, width: 50),
-                Spacer(flex: 50),
+              children: [
                 Text(
                   'Halo, Sobat Ngawonggo',
                   style: TextStyle(
@@ -60,6 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 5),
                 Text(
@@ -69,8 +82,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
+                  textAlign: TextAlign.center,
                 ),
                 SizedBox(height: 16),
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
@@ -91,32 +106,41 @@ class _MyHomePageState extends State<MyHomePage> {
                     ],
                   ),
                 ),
+
                 Spacer(),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()),
-                    );
-                  },
-                  child: Text('Login'),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 50),
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                  ),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => FingerprintScreen()),
-                    );
-                  },
-                  child: Icon(Icons.fingerprint),
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: Size(double.infinity, 50),
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: Column(
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => LoginScreen()),
+                          );
+                        },
+                        child: Text('Login'),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 50),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                      ),
+                      SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => FingerprintScreen()),
+                          );
+                        },
+                        child: Icon(Icons.fingerprint),
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: Size(double.infinity, 50),
+                          padding: EdgeInsets.symmetric(horizontal: 16),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 32),
@@ -138,4 +162,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-//

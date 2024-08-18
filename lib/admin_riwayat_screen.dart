@@ -11,6 +11,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
   late TabController _tabController;
   final double _borderThickness = 2.0;
 
+
   @override
   void initState() {
     super.initState();
@@ -164,17 +165,51 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
         ),
         body: TabBarView(
           controller: _tabController,
-          children: const [
-            Center(child: Text('Semua')),
-            Center(child: Text('Menunggu Diproses')),
-            Center(child: Text('Diproses')),
-            Center(child: Text('Diterima')),
-            Center(child: Text('Berhasil')),
-            Center(child: Text('Gagal')),
+          children: [
+            RiwayatList(status: 'Semua'),
+            RiwayatList(status: 'Menunggu Diproses'),
+            RiwayatList(status: 'Diproses'),
+            RiwayatList(status: 'Diterima'),
+            RiwayatList(status: 'Berhasil'),
+            RiwayatList(status: 'Gagal'),
           ],
         ),
       ),
     );
   }
 }
-//
+
+class RiwayatList extends StatelessWidget {
+  final String status;
+  const RiwayatList({required this.status});
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      padding: const EdgeInsets.all(8.0),
+      itemCount: 4,
+      itemBuilder: (context, index) {
+        return Container(
+            margin: const EdgeInsets.symmetric(vertical: 8.0),
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey),
+        borderRadius: BorderRadius.circular(8.0),
+        color: Colors.white,
+        ),
+        child: ListTile(
+        leading: const Icon(Icons.person),
+        title: Text('Nama Lengkap'),
+        subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        Text('Tanggal: 10-07-2024'),
+        Text('Jenis Surat: Surat Pengantar SKCK'),
+        Text('Status: $status'),
+            ],
+          ),
+        ),
+        );
+      },
+    );
+  }
+}
