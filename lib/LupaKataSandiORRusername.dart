@@ -73,7 +73,7 @@ class _LupaKataSandiORRusernameState extends State<LupaKataSandiORRusername> {
                 ),
                 title: Text('Lupa Password'),
                 subtitle: Text(
-                  'Fitur lupa password digunakan untuk membuat password kembali dan membuka blokir Akun BRImo',
+                  'Fitur lupa password digunakan untuk membuat password kembali dan membuka blokir Akun',
                   style: TextStyle(fontSize: 12),
                 ),
               ),
@@ -111,4 +111,4 @@ class _LupaKataSandiORRusernameState extends State<LupaKataSandiORRusername> {
       ),
     );
   }
-}//
+}

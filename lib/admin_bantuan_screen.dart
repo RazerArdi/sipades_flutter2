@@ -62,13 +62,15 @@ class AdminBantuanScreen extends StatelessWidget {
               _ContactItem(
                 icon: Icons.phone,
                 label: 'WhatsApp Developer',
-                phoneNumber: '6281000000000',
+                phoneNumber: '6281330483643',
+                contactInfo: '6281330483643',
               ),
               const SizedBox(height: 16.0),
               _ContactItem(
                 icon: Icons.email,
                 label: 'Email Developer',
-                email: 'ngawonggodesa@gmail.com',
+                email: 'bayuardi30@outlook.com',
+                contactInfo: 'bayuardi30@outlook.com',
               ),
             ],
           ),
@@ -83,6 +85,7 @@ class _ContactItem extends StatelessWidget {
   final String label;
   final String? phoneNumber;
   final String? email;
+  final String contactInfo;
 
   const _ContactItem({
     Key? key,
@@ -90,11 +93,13 @@ class _ContactItem extends StatelessWidget {
     required this.label,
     this.phoneNumber,
     this.email,
+    required this.contactInfo,
   }) : super(key: key);
 
   void _launchURL(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+    final uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       throw 'Could not launch $url';
     }
@@ -105,9 +110,11 @@ class _ContactItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (phoneNumber != null) {
-          _launchURL('https://wa.me/$phoneNumber');
+          final whatsappUrl = 'https://wa.me/$phoneNumber';
+          _launchURL(whatsappUrl);
         } else if (email != null) {
-          _launchURL('mailto:$email');
+          final emailUrl = 'mailto:$email';
+          _launchURL(emailUrl);
         }
       },
       child: Container(
@@ -124,13 +131,28 @@ class _ContactItem extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, size: 32.0, color: Colors.purple),
-            const SizedBox(width: 16.0),
+            Row(
+              children: [
+                Icon(icon, size: 32.0, color: Colors.purple),
+                const SizedBox(width: 16.0),
+                Expanded(
+                  child: Text(
+                    label,
+                    style: const TextStyle(fontSize: 16.0),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8.0),
             Text(
-              label,
-              style: const TextStyle(fontSize: 16.0),
+              contactInfo,
+              style: const TextStyle(
+                fontSize: 14.0,
+                color: Colors.black,
+              ),
             ),
           ],
         ),
@@ -138,4 +160,3 @@ class _ContactItem extends StatelessWidget {
     );
   }
 }
-//

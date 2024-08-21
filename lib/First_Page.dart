@@ -66,7 +66,8 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               children: [
                 Text(
-                  'Halo, Sobat Ngawonggo',
+                  ''
+                      'Halo, Sobat Ngawonggo',
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -84,25 +85,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: kBottomNavigationBarHeight),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildMenuItem('assets/images/aduanmasyarakat.png', 'Aduan Masyarakat'),
-                      _buildMenuItem('assets/images/Surat.png', 'Surat/Berkas'),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
                       _buildMenuItem('assets/images/registrasipenduduk.png', 'Registrasi Penduduk Baru'),
+                      _buildMenuItem('assets/images/Surat.png', 'Surat/Berkas'),
                     ],
                   ),
                 ),
