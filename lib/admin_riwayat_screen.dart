@@ -10,9 +10,9 @@ class AdminRiwayatScreen extends StatefulWidget {
 
 class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
     with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+  late TabController _tabController; // Kontroler tab untuk mengelola tab yang aktif
   final double _borderThickness = 2.0; // Ketebalan garis bawah tab
-  final GoogleService_AdminDataMasuk _sheetsService = GoogleService_AdminDataMasuk();
+  final GoogleService_AdminDataMasuk _sheetsService = GoogleService_AdminDataMasuk(); // Layanan untuk berinteraksi dengan Google Sheets
 
   // Data yang akan ditampilkan, dibagi berdasarkan status
   Map<String, List<Map<String, String>>> _data = {
@@ -30,16 +30,17 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 6, // Jumlah tab
-      vsync: this,
+      length: 6, // Jumlah tab yang akan ditampilkan
+      vsync: this, // Menggunakan SingleTickerProviderStateMixin untuk animasi
     );
     _fetchData(); // Mengambil data saat halaman diinisialisasi
   }
 
   // Mengambil data dari Google Sheets dan mengelompokkan berdasarkan status
   Future<void> _fetchData() async {
-    final data = await _sheetsService.fetchData(); // Mengambil data dari layanan
+    final data = await _sheetsService.fetchData(); // Mengambil data dari layanan Google Sheets
     setState(() {
+      // Mengelompokkan data berdasarkan status
       _data['Semua'] = data;
       _data['Menunggu Diproses'] = data.where((item) => item['Status'] == 'Menunggu Diproses').toList();
       _data['Diproses'] = data.where((item) => item['Status'] == 'Diproses').toList();
@@ -93,7 +94,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
       onWillPop: () => _onWillPop(context), // Menangani tombol kembali
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('DATA'),
+          title: const Text('DATA'), // Judul pada AppBar
           centerTitle: true, // Judul berada di tengah
           automaticallyImplyLeading: false, // Menghilangkan tombol kembali default
           bottom: PreferredSize(
@@ -106,14 +107,14 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
                 ),
                 TabBar(
                   controller: _tabController,
-                  isScrollable: true, // Tab dapat digulir
+                  isScrollable: true, // Tab dapat digulir jika melebihi lebar
                   tabs: [
-                    Tab(child: _buildTab('Semua')),
-                    Tab(child: _buildTab('Menunggu Diproses')),
-                    Tab(child: _buildTab('Diproses')),
-                    Tab(child: _buildTab('Diterima')),
-                    Tab(child: _buildTab('Berhasil')),
-                    Tab(child: _buildTab('Gagal')),
+                    Tab(child: _buildTab('Semua')), // Tab untuk semua data
+                    Tab(child: _buildTab('Menunggu Diproses')), // Tab untuk data menunggu diproses
+                    Tab(child: _buildTab('Diproses')), // Tab untuk data diproses
+                    Tab(child: _buildTab('Diterima')), // Tab untuk data diterima
+                    Tab(child: _buildTab('Berhasil')), // Tab untuk data berhasil
+                    Tab(child: _buildTab('Gagal')), // Tab untuk data gagal
                   ],
                 ),
               ],
@@ -202,7 +203,7 @@ class RiwayatList extends StatefulWidget {
 }
 
 class _RiwayatListState extends State<RiwayatList> {
-  late List<Map<String, String>> filteredData;
+  late List<Map<String, String>> filteredData; // Data yang sudah difilter
   String searchQuery = ''; // Query pencarian
 
   @override
