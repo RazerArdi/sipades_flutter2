@@ -10,6 +10,7 @@ import 'package:googleapis_auth/auth_io.dart';
 
 import 'Google_Service_AdminBeranda.dart';
 
+// Halaman Beranda Admin
 class AdminBerandaScreen extends StatefulWidget {
   const AdminBerandaScreen({Key? key}) : super(key: key);
 
@@ -18,58 +19,65 @@ class AdminBerandaScreen extends StatefulWidget {
 }
 
 class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
-  late Google_Service_AdminBeranda _googleService;
-  List<ChartData> _chartData = [];
-  List<DemographicData> _demographicData = [];
-  int _totalPopulation = 0;
-  double _successRate = 0.0;
+  late Google_Service_AdminBeranda _googleService; // Instance untuk mengakses layanan Google
+  List<ChartData> _chartData = []; // Data untuk grafik
+  List<DemographicData> _demographicData = []; // Data demografi
+  int _totalPopulation = 0; // Total populasi
+  double _successRate = 0.0; // Tingkat keberhasilan
 
-  bool _isLoading = true;
-  DateTimeRange? _selectedDateRange;
-  List<ChartData> _filteredChartData = [];
+  bool _isLoading = true; // Menandakan apakah data sedang dimuat
+  DateTimeRange? _selectedDateRange; // Rentang tanggal yang dipilih
+  List<ChartData> _filteredChartData = []; // Data grafik yang sudah difilter berdasarkan tanggal
 
   @override
   void initState() {
     super.initState();
-    _initializeService();
+    _initializeService(); // Inisialisasi layanan Google saat halaman dimuat
   }
 
+  // Method untuk menginisialisasi layanan Google
   Future<void> _initializeService() async {
     _googleService = Google_Service_AdminBeranda();
-    await _loadData();
+    await _loadData(); // Memuat data setelah layanan diinisialisasi
   }
 
+  // Method untuk memuat data dari layanan Google
   Future<void> _loadData() async {
     try {
+      // Mengambil data dari layanan
       final sessionData = await _googleService.getSessionSummary();
       final demographicData = await _googleService.getDemographicData();
       final totalPopulation = await _googleService.getTotalPopulation();
       final successRate = await _googleService.getSuccessRate();
 
+      // Mengupdate state dengan data yang diterima
       setState(() {
         _chartData = sessionData;
         _demographicData = demographicData;
         _totalPopulation = totalPopulation;
         _successRate = successRate;
         _filteredChartData = _filterChartData(sessionData);
-        _isLoading = false;
+        _isLoading = false; // Menandakan bahwa data sudah dimuat
       });
     } catch (e) {
-      print('Error loading data: $e');
+      print('Error loading data: $e'); // Menampilkan error jika data gagal dimuat
       setState(() {
-        _isLoading = false;
+        _isLoading = false; // Menandakan bahwa proses pemuatan data selesai
       });
     }
   }
 
+  // Method untuk memfilter data grafik berdasarkan rentang tanggal yang dipilih
   List<ChartData> _filterChartData(List<ChartData> data) {
-    if (_selectedDateRange == null) return data;
+    if (_selectedDateRange == null) return data; // Jika tidak ada rentang tanggal yang dipilih, kembalikan data asli
     return data.where((item) {
+      // Mengembalikan data yang sesuai dengan rentang tanggal
       return item.date.isAfter(_selectedDateRange!.start) &&
           item.date.isBefore(_selectedDateRange!.end);
     }).toList();
   }
 
+  // Method untuk memilih rentang tanggal
   Future<void> _selectDateRange() async {
     DateTimeRange? newRange = await showDialog<DateTimeRange>(
       context: context,
@@ -82,6 +90,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Tombol untuk memilih rentang tanggal
                   ElevatedButton(
                     onPressed: () async {
                       final pickedRange = await showDateRangePicker(
@@ -115,7 +124,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
                       padding: const EdgeInsets.only(top: 16.0),
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.of(context).pop(selectedRange);
+                          Navigator.of(context).pop(selectedRange); // Kembali ke halaman sebelumnya dengan rentang tanggal yang dipilih
                         },
                         child: const Text('Terapkan'),
                       ),
@@ -131,12 +140,12 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
     if (newRange != null) {
       setState(() {
         _selectedDateRange = newRange;
-        _filteredChartData = _filterChartData(_chartData);
+        _filteredChartData = _filterChartData(_chartData); // Memfilter data grafik berdasarkan rentang tanggal yang dipilih
       });
     }
   }
 
-
+  // Method untuk menampilkan dialog konfirmasi saat akan keluar dari aplikasi
   Future<bool> _onWillPop(BuildContext context) async {
     final shouldExit = await showDialog<bool>(
       context: context,
@@ -144,41 +153,44 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
         title: const Text('Konfirmasi'),
         content: const Text('Apakah Anda yakin ingin keluar dari aplikasi?'),
         actions: [
+          // Tombol untuk tidak keluar
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
             child: const Text('Tidak'),
           ),
+          // Tombol untuk keluar dari aplikasi
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(true);
-              SystemNavigator.pop();
+              SystemNavigator.pop(); // Keluar dari aplikasi
             },
             child: const Text('Iya'),
           ),
         ],
       ),
     );
-    return shouldExit ?? false;
+    return shouldExit ?? false; // Mengembalikan keputusan pengguna
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _onWillPop(context),
+      onWillPop: () => _onWillPop(context), // Mengatur aksi saat tombol kembali ditekan
       child: Scaffold(
         appBar: AppBar(
           title: const Text('SIPADES - Beranda Admin'),
-          centerTitle: true,
-          automaticallyImplyLeading: false,
+          centerTitle: true, // Menengahkan judul di AppBar
+          automaticallyImplyLeading: false, // Menghilangkan tombol kembali default di AppBar
         ),
         body: _isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator()) // Menampilkan indikator pemuatan jika data sedang dimuat
             : SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // Judul untuk permintaan surat
                 const Text(
                   'Permintaan Surat',
                   style: TextStyle(
@@ -187,11 +199,13 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                // Tombol untuk memfilter data berdasarkan tanggal
                 ElevatedButton(
                   onPressed: _selectDateRange,
                   child: const Text('Filter Berdasarkan Tanggal'),
                 ),
                 const SizedBox(height: 16),
+                // Widget grafik untuk data
                 Container(
                   height: 250,
                   child: SfCartesianChart(
@@ -221,7 +235,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
                         color: Colors.green,
                       ),
                     ],
-                    tooltipBehavior: TooltipBehavior(enable: true),
+                    tooltipBehavior: TooltipBehavior(enable: true), // Menampilkan tooltip pada grafik
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -243,7 +257,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
                               ),
                               const SizedBox(height: 16),
                               CircularProgressIndicator(
-                                value: _totalPopulation / 10000,
+                                value: _totalPopulation / 10000, // Menampilkan progress indicator
                                 color: Colors.green,
                                 strokeWidth: 10,
                               ),
@@ -279,7 +293,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
                               ),
                               const SizedBox(height: 16),
                               CircularProgressIndicator(
-                                value: _successRate,
+                                value: _successRate, // Menampilkan progress indicator
                                 color: Colors.green,
                                 strokeWidth: 10,
                               ),
@@ -300,6 +314,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
                   ],
                 ),
                 const SizedBox(height: 16),
+                // Widget kartu untuk data demografi
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -334,7 +349,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
                                 color: Colors.green,
                               ),
                             ],
-                            tooltipBehavior: TooltipBehavior(enable: true),
+                            tooltipBehavior: TooltipBehavior(enable: true), // Menampilkan tooltip pada grafik
                           ),
                         ),
                       ],
@@ -342,6 +357,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                // Widget kartu untuk presentasi keberhasilan surat
                 Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
@@ -357,7 +373,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          '${(_successRate * 100).toStringAsFixed(2)}%',
+                          '${(_successRate * 100).toStringAsFixed(2)}%', // Menampilkan presentasi keberhasilan
                           style: const TextStyle(
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
@@ -370,7 +386,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
                         ),
                         const SizedBox(height: 16),
                         LinearProgressIndicator(
-                          value: _successRate,
+                          value: _successRate, // Menampilkan progress bar untuk tingkat keberhasilan
                           backgroundColor: Colors.grey,
                           valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
                         ),

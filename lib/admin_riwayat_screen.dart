@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'GoogleService_AdminDataMasuk.dart';
 
+// Halaman untuk menampilkan riwayat data admin
 class AdminRiwayatScreen extends StatefulWidget {
   @override
   _AdminRiwayatScreenState createState() => _AdminRiwayatScreenState();
@@ -10,9 +11,10 @@ class AdminRiwayatScreen extends StatefulWidget {
 class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final double _borderThickness = 2.0;
+  final double _borderThickness = 2.0; // Ketebalan garis bawah tab
   final GoogleService_AdminDataMasuk _sheetsService = GoogleService_AdminDataMasuk();
 
+  // Data yang akan ditampilkan, dibagi berdasarkan status
   Map<String, List<Map<String, String>>> _data = {
     'Semua': [],
     'Menunggu Diproses': [],
@@ -22,20 +24,21 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
     'Gagal': [],
   };
 
-  bool _isLoading = true;
+  bool _isLoading = true; // Menandakan apakah data masih dimuat
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(
-      length: 6,
+      length: 6, // Jumlah tab
       vsync: this,
     );
-    _fetchData();
+    _fetchData(); // Mengambil data saat halaman diinisialisasi
   }
 
+  // Mengambil data dari Google Sheets dan mengelompokkan berdasarkan status
   Future<void> _fetchData() async {
-    final data = await _sheetsService.fetchData();
+    final data = await _sheetsService.fetchData(); // Mengambil data dari layanan
     setState(() {
       _data['Semua'] = data;
       _data['Menunggu Diproses'] = data.where((item) => item['Status'] == 'Menunggu Diproses').toList();
@@ -43,20 +46,22 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
       _data['Diterima'] = data.where((item) => item['Status'] == 'Diterima').toList();
       _data['Berhasil'] = data.where((item) => item['Status'] == 'Berhasil').toList();
       _data['Gagal'] = data.where((item) => item['Status'] == 'Gagal').toList();
-      _isLoading = false;
+      _isLoading = false; // Data telah dimuat
     });
   }
 
+  // Menangani perubahan status data dan memperbarui tampilan
   Future<void> _handleStatusChange() async {
     setState(() {
-      _isLoading = true;
+      _isLoading = true; // Tampilkan indikator pemuatan
     });
-    await _fetchData();
+    await _fetchData(); // Mengambil data terbaru
     setState(() {
-      _isLoading = false;
+      _isLoading = false; // Sembunyikan indikator pemuatan
     });
   }
 
+  // Menampilkan dialog konfirmasi saat akan keluar dari halaman
   Future<bool> _onWillPop(BuildContext context) async {
     final shouldExit = await showDialog<bool>(
       context: context,
@@ -65,13 +70,13 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
         content: const Text('Apakah Anda yakin ingin keluar dari halaman ini?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
+            onPressed: () => Navigator.of(context).pop(false), // Tidak keluar dari halaman
             child: const Text('Tidak'),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(true);
-              SystemNavigator.pop();
+              SystemNavigator.pop(); // Keluar dari aplikasi
             },
             child: const Text('Iya'),
           ),
@@ -79,29 +84,29 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
       ),
     );
 
-    return shouldExit ?? false;
+    return shouldExit ?? false; // Mengembalikan keputusan pengguna
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _onWillPop(context),
+      onWillPop: () => _onWillPop(context), // Menangani tombol kembali
       child: Scaffold(
         appBar: AppBar(
           title: const Text('DATA'),
-          centerTitle: true,
-          automaticallyImplyLeading: false,
+          centerTitle: true, // Judul berada di tengah
+          automaticallyImplyLeading: false, // Menghilangkan tombol kembali default
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(48.0),
             child: Column(
               children: [
                 Container(
                   color: Colors.red,
-                  height: _borderThickness,
+                  height: _borderThickness, // Garis bawah tab
                 ),
                 TabBar(
                   controller: _tabController,
-                  isScrollable: true,
+                  isScrollable: true, // Tab dapat digulir
                   tabs: [
                     Tab(child: _buildTab('Semua')),
                     Tab(child: _buildTab('Menunggu Diproses')),
@@ -116,7 +121,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
           ),
         ),
         body: _isLoading
-            ? Center(child: CircularProgressIndicator())
+            ? Center(child: CircularProgressIndicator()) // Menampilkan indikator pemuatan saat data dimuat
             : TabBarView(
           controller: _tabController,
           children: [
@@ -162,6 +167,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
     );
   }
 
+  // Membangun tab dengan styling khusus
   Widget _buildTab(String title) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -177,6 +183,7 @@ class _AdminRiwayatScreenState extends State<AdminRiwayatScreen>
   }
 }
 
+// Widget untuk menampilkan daftar riwayat berdasarkan status
 class RiwayatList extends StatefulWidget {
   final String status;
   final List<Map<String, String>> data;
@@ -196,20 +203,21 @@ class RiwayatList extends StatefulWidget {
 
 class _RiwayatListState extends State<RiwayatList> {
   late List<Map<String, String>> filteredData;
-  String searchQuery = '';
+  String searchQuery = ''; // Query pencarian
 
   @override
   void initState() {
     super.initState();
-    _filterData();
+    _filterData(); // Menyaring data saat inisialisasi
   }
 
   @override
   void didUpdateWidget(covariant RiwayatList oldWidget) {
     super.didUpdateWidget(oldWidget);
-    _filterData();
+    _filterData(); // Menyaring data saat widget diperbarui
   }
 
+  // Menyaring data berdasarkan status dan pencarian
   void _filterData() {
     if (widget.status == 'Semua') {
       filteredData = widget.data;
@@ -229,6 +237,7 @@ class _RiwayatListState extends State<RiwayatList> {
     }
   }
 
+  // Menangani perubahan query pencarian
   void _onSearchQueryChanged(String query) {
     setState(() {
       searchQuery = query;
@@ -236,6 +245,7 @@ class _RiwayatListState extends State<RiwayatList> {
     });
   }
 
+  // Mendapatkan warna berdasarkan status
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Menunggu Diproses':
@@ -253,6 +263,7 @@ class _RiwayatListState extends State<RiwayatList> {
     }
   }
 
+  // Menampilkan dialog untuk mengubah status
   Future<void> _changeStatus(BuildContext context, Map<String, String> item) async {
     String? newStatus = await showDialog<String>(
       context: context,
@@ -279,8 +290,8 @@ class _RiwayatListState extends State<RiwayatList> {
 
     if (newStatus != null && newStatus != item['Status']) {
       item['Status'] = newStatus;
-      await widget.sheetsService.updateStatus(item['ID']!, newStatus);
-      widget.onStatusChanged();
+      await widget.sheetsService.updateStatus(item['ID']!, newStatus); // Memperbarui status di layanan
+      widget.onStatusChanged(); // Memanggil callback untuk memperbarui tampilan
     }
   }
 
@@ -296,7 +307,7 @@ class _RiwayatListState extends State<RiwayatList> {
               border: OutlineInputBorder(),
               prefixIcon: Icon(Icons.search),
             ),
-            onChanged: _onSearchQueryChanged,
+            onChanged: _onSearchQueryChanged, // Menangani perubahan query pencarian
           ),
         ),
         Expanded(
@@ -332,7 +343,7 @@ class _RiwayatListState extends State<RiwayatList> {
                     Text('Jenis Surat: ${item['Jenis Surat']}'),
                     const SizedBox(height: 8.0),
                     GestureDetector(
-                      onTap: () => _changeStatus(context, item),
+                      onTap: () => _changeStatus(context, item), // Menangani tap untuk mengubah status
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                         decoration: BoxDecoration(

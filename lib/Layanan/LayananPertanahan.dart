@@ -7,12 +7,12 @@ import '../SURAT/SK_LayananPertanahan/LayananPertanahan_SuratKeteranganJaminanRu
 import '../SURAT/SK_LayananPertanahan/LayananPertanahan_KeteranganAhliWaris.dart';
 import '../SURAT/SK_LayananPertanahan/LayananPertanahan_KeteranganDesa.dart';
 
-class DomisiliHajiScreen extends StatefulWidget {
+class PertanahanScreen extends StatefulWidget {
   @override
-  _DomisiliHajiScreenState createState() => _DomisiliHajiScreenState();
+  _PertanahanScreenState createState() => _PertanahanScreenState();
 }
 
-class _DomisiliHajiScreenState extends State<DomisiliHajiScreen> {
+class _PertanahanScreenState extends State<PertanahanScreen> {
   final List<Map<String, dynamic>> _services = [
     {'title': 'Surat Keterangan Pencocokan Sporadik', 'icon': Icons.document_scanner, 'color': Colors.blue, 'page': LayananPertanahan_SuratKeteranganPencocokanSporadik()},
     {'title': 'Sporadik', 'icon': Icons.document_scanner, 'color': Colors.green, 'page': LayananPertanahan_Sporadik()},

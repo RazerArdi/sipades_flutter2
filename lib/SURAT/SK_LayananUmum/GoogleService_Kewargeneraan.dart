@@ -1,12 +1,15 @@
 import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:googleapis_auth/auth_io.dart';
 
+// Kelas ini digunakan untuk mengambil data kewarganegaraan dari Google Sheets
 class GoogleService_Kewargeneraan {
-  final String sheetId;
+  final String sheetId; // ID dari Google Sheets yang akan diakses
 
   GoogleService_Kewargeneraan({required this.sheetId});
 
+  // Fungsi untuk mengambil data kewarganegaraan dari Google Sheets
   Future<List<String>> fetchKewargeneraan() async {
+    // Kredensial layanan akun dari JSON yang berisi informasi kunci private dan email klien
     final _credentials = ServiceAccountCredentials.fromJson(r'''
     {
       "private_key_id": "d3a0ca84f74d32aa62c97ffc024e5ff9453c4bcf",
@@ -17,32 +20,39 @@ class GoogleService_Kewargeneraan {
     }
     ''');
 
+    // Scopes yang diperlukan untuk mengakses data spreadsheet secara readonly
     final _scopes = [sheets.SheetsApi.spreadsheetsReadonlyScope];
+
+    // Membuat client API dengan menggunakan kredensial layanan
     final _client = await clientViaServiceAccount(_credentials, _scopes);
 
     final sheetsApi = sheets.SheetsApi(_client);
 
     try {
-      // Adjust the range to B2:B to get all values starting from B2
+      // Mengambil data dari sheet 'KEWARGENERAAN', dimulai dari B2
       final response = await sheetsApi.spreadsheets.values.get(sheetId, 'KEWARGENERAAN!B2:B');
       final rows = response.values;
 
+      // Daftar untuk menyimpan data kewarganegaraan
       List<String> kewargeneraanList = [];
       if (rows != null) {
         for (var row in rows) {
           if (row.isNotEmpty) {
             String kewargeneraan = row[0] as String;
 
-            if (!kewargeneraan.contains('Daftar Nama') && !kewargeneraan.contains('Daftar Provinsi') && !kewargeneraan.contains(':')) {
-              kewargeneraanList.add(kewargeneraan.trim());
+            // Memastikan data yang diambil bukanlah header atau metadata lainnya
+            if (!kewargeneraan.contains('Daftar Nama') &&
+                !kewargeneraan.contains('Daftar Provinsi') &&
+                !kewargeneraan.contains(':')) {
+              kewargeneraanList.add(kewargeneraan.trim()); // Menambahkan data kewarganegaraan yang valid
             }
           }
         }
       }
       return kewargeneraanList;
     } catch (e) {
-      print('Error fetching kewargeneraan data: $e');
-      rethrow;
+      print('Error fetching kewargeneraan data: $e'); // Menangani error jika terjadi kesalahan
+      rethrow; // Mengembalikan error untuk penanganan lebih lanjut
     }
   }
 }

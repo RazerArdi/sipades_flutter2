@@ -11,6 +11,7 @@ import 'BIODATAPENDUDUK/BP_FormulirPermohonanKTP.dart';
 import 'BIODATAPENDUDUK/BP_SuratKeteranganDomisili.dart';
 import 'BIODATAPENDUDUK/BP_SuratKeteranganHilangKK.dart';
 
+// Widget utama untuk menampilkan layanan kependudukan
 class LayananKependudukanBiodataPenduduk extends StatefulWidget {
   @override
   _LayananKependudukanBiodataPendudukState createState() =>
@@ -19,6 +20,7 @@ class LayananKependudukanBiodataPenduduk extends StatefulWidget {
 
 class _LayananKependudukanBiodataPendudukState
     extends State<LayananKependudukanBiodataPenduduk> {
+  // Daftar item layanan yang akan ditampilkan
   final List<Map<String, String>> _items = [
     {'title': 'Formulir Kartu Keluarga (Pengganti F-1.01)', 'subtitle': ''},
     {'title': 'Formulir Pendaftaran Peristiwa Kependudukan (F-1.02)', 'subtitle': ''},
@@ -33,19 +35,24 @@ class _LayananKependudukanBiodataPendudukState
     {'title': 'Surat Keterangan Hilang Kartu Keluarga', 'subtitle': ''},
   ];
 
+  // Daftar item yang sudah difilter berdasarkan query pencarian
   List<Map<String, String>> _filteredItems = [];
 
   @override
   void initState() {
     super.initState();
+    // Inisialisasi _filteredItems dengan nilai awal dari _items
     _filteredItems = _items;
   }
 
+  // Fungsi untuk memfilter item berdasarkan query pencarian
   void _filterItems(String query) {
     setState(() {
       if (query.isEmpty) {
+        // Jika query kosong, tampilkan semua item
         _filteredItems = _items;
       } else {
+        // Filter item yang mengandung query pada judul
         _filteredItems = _items
             .where((item) =>
             item['title']!.toLowerCase().contains(query.toLowerCase()))
@@ -61,16 +68,16 @@ class _LayananKependudukanBiodataPendudukState
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context); // Kembali ke halaman sebelumnya
           },
         ),
-        title: const Text('Biodata Penduduk'),
-        backgroundColor: Colors.black,
+        title: const Text('Biodata Penduduk'), // Judul pada AppBar
+        backgroundColor: Colors.black, // Warna latar belakang AppBar
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white), // Warna ikon pada AppBar
         titleTextStyle: const TextStyle(
           color: Colors.white,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.bold, // Gaya teks judul AppBar
         ),
       ),
       body: Column(
@@ -78,29 +85,30 @@ class _LayananKependudukanBiodataPendudukState
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
-              onChanged: _filterItems,
+              onChanged: _filterItems, // Memanggil fungsi _filterItems saat teks berubah
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.grey[300],
-                hintText: 'Cari',
-                prefixIcon: const Icon(Icons.search),
+                fillColor: Colors.grey[300], // Warna latar belakang TextField
+                hintText: 'Cari', // Teks petunjuk pada TextField
+                prefixIcon: const Icon(Icons.search), // Ikon pencarian pada TextField
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(20), // Sudut border TextField
+                  borderSide: BorderSide.none, // Menghilangkan border default
                 ),
               ),
             ),
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: _filteredItems.length,
+              itemCount: _filteredItems.length, // Jumlah item yang ditampilkan
               itemBuilder: (context, index) {
                 final item = _filteredItems[index];
                 return _Item(
-                  icon: Icons.person,
+                  icon: Icons.person, // Ikon untuk setiap item
                   title: item['title']!,
                   subtitle: item['subtitle']!,
                   onTap: () {
+                    // Menavigasi ke halaman detail berdasarkan judul item
                     _navigateToDetailPage(context, item['title']!);
                   },
                 );
@@ -112,6 +120,7 @@ class _LayananKependudukanBiodataPendudukState
     );
   }
 
+  // Fungsi untuk menavigasi ke halaman detail berdasarkan judul item
   void _navigateToDetailPage(BuildContext context, String title) {
     switch (title) {
       case 'Formulir Kartu Keluarga (Pengganti F-1.01)':
@@ -181,12 +190,13 @@ class _LayananKependudukanBiodataPendudukState
         );
         break;
       default:
-      // Handle default case if needed
+      // Tangani kasus default jika diperlukan
         break;
     }
   }
 }
 
+// Widget untuk menampilkan item pada daftar layanan
 class _Item extends StatelessWidget {
   const _Item({
     Key? key,
@@ -196,26 +206,26 @@ class _Item extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
+  final IconData icon; // Ikon yang ditampilkan di samping judul
+  final String title; // Judul item
+  final String subtitle; // Subtitle atau deskripsi item
+  final VoidCallback onTap; // Fungsi yang dipanggil saat item ditekan
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTap, // Menangani aksi tap pada item
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8.0),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.white, // Warna latar belakang item
+          borderRadius: BorderRadius.circular(8.0), // Sudut border item
           boxShadow: const [
             BoxShadow(
               color: Colors.grey,
               blurRadius: 4.0,
-              offset: Offset(0.0, 2.0),
+              offset: Offset(0.0, 2.0), // Bayangan di bawah item
             ),
           ],
         ),
@@ -224,9 +234,9 @@ class _Item extends StatelessWidget {
             Icon(
               icon,
               size: 40.0,
-              color: Colors.black,
+              color: Colors.black, // Warna ikon
             ),
-            const SizedBox(width: 16.0),
+            const SizedBox(width: 16.0), // Jarak antara ikon dan teks
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -235,15 +245,15 @@ class _Item extends StatelessWidget {
                     title,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
+                      fontSize: 16.0, // Ukuran font judul
                     ),
                   ),
-                  const SizedBox(height: 4.0),
+                  const SizedBox(height: 4.0), // Jarak antara judul dan subtitle
                   Text(
                     subtitle.isNotEmpty ? subtitle : 'No additional details',
                     style: const TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.grey,
+                      fontSize: 14.0, // Ukuran font subtitle
+                      color: Colors.grey, // Warna teks subtitle
                     ),
                   ),
                 ],

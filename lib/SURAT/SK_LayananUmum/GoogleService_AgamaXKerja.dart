@@ -1,12 +1,15 @@
 import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:googleapis_auth/auth_io.dart';
 
+// Kelas ini digunakan untuk mengakses dan mengambil data dari Google Sheets
 class GoogleService_AgamaXKerja {
-  final String sheetId;
+  final String sheetId; // ID dari Google Sheets yang akan diakses
 
   GoogleService_AgamaXKerja({required this.sheetId});
 
+  // Fungsi untuk mengambil data agama dan pekerjaan dari Google Sheets
   Future<Map<String, List<String>>> fetchAgama() async {
+    // Kredensial layanan akun dari JSON yang berisi informasi kunci private dan email klien
     final _credentials = ServiceAccountCredentials.fromJson(r'''
     {
       "private_key_id": "d3a0ca84f74d32aa62c97ffc024e5ff9453c4bcf",
@@ -17,34 +20,41 @@ class GoogleService_AgamaXKerja {
     }
     ''');
 
+    // Scopes yang diperlukan untuk mengakses data spreadsheet secara readonly
     final _scopes = [sheets.SheetsApi.spreadsheetsReadonlyScope];
+
+    // Membuat client API dengan menggunakan kredensial layanan
     final _client = await clientViaServiceAccount(_credentials, _scopes);
 
     final sheetsApi = sheets.SheetsApi(_client);
 
     try {
+      // Mengambil data dari dua sheet: 'AGAMA' dan 'PEKERJAAN'
       final agamaResponse = await sheetsApi.spreadsheets.values.get(sheetId, 'AGAMA!B2:B');
       final pekerjaanResponse = await sheetsApi.spreadsheets.values.get(sheetId, 'PEKERJAAN!B2:B');
 
+      // Memproses data menjadi list string
       List<String> agamaList = _parseResponse(agamaResponse.values);
       List<String> pekerjaanList = _parseResponse(pekerjaanResponse.values);
 
+      // Mengembalikan hasil dalam bentuk Map
       return {
         'agama': agamaList,
         'pekerjaan': pekerjaanList,
       };
     } catch (e) {
-      print('Error fetching data: $e');
-      rethrow;
+      print('Error fetching data: $e'); // Menangani error jika terjadi kesalahan
+      rethrow; // Mengembalikan error untuk penanganan lebih lanjut
     }
   }
 
+  // Fungsi untuk mengubah data dari response sheet menjadi list string
   List<String> _parseResponse(List<List<Object?>>? values) {
     List<String> list = [];
     if (values != null) {
       for (var row in values) {
         if (row.isNotEmpty) {
-          list.add(row[0] as String);
+          list.add(row[0] as String); // Menambahkan nilai string dari setiap baris
         }
       }
     }

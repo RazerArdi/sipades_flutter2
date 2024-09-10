@@ -1,19 +1,23 @@
-import 'package:googleapis/sheets/v4.dart' as sheets;
-import 'package:googleapis_auth/auth_io.dart';
-import 'dart:math';
+import 'package:googleapis/sheets/v4.dart' as sheets; // Mengimpor library untuk berinteraksi dengan Google Sheets API
+import 'package:googleapis_auth/auth_io.dart'; // Mengimpor library untuk autentikasi menggunakan Google APIs
+import 'dart:math'; // Mengimpor library untuk fungsi-fungsi matematika, termasuk pengacakan
 
+// Kelas ini menangani interaksi dengan Google Sheets, termasuk autentikasi dan operasi data
 class GoogleSheetsService {
-  final String sheetId;
-  sheets.SheetsApi? _sheetsApi;
+  final String sheetId; // ID dari spreadsheet yang akan diakses
+  sheets.SheetsApi? _sheetsApi; // Instance dari SheetsApi yang digunakan untuk berkomunikasi dengan Google Sheets
 
+  // Konstruktor kelas, menerima sheetId dan memulai proses inisialisasi
   GoogleSheetsService(this.sheetId) {
     _initializeSheetsApi();
   }
 
+  // Fungsi untuk menginisialisasi SheetsApi dengan autentikasi menggunakan akun layanan
   Future<void> _initializeSheetsApi() async {
+    // Jika _sheetsApi sudah diinisialisasi, tidak perlu melakukannya lagi
     if (_sheetsApi != null) return;
 
-    final scopes = [sheets.SheetsApi.spreadsheetsScope];
+    final scopes = [sheets.SheetsApi.spreadsheetsScope]; // Mendefinisikan scope akses untuk Google Sheets API
     final credentials = ServiceAccountCredentials.fromJson(r'''
       {
         "private_key_id": "d3a0ca84f74d32aa62c97ffc024e5ff9453c4bcf",
@@ -27,27 +31,31 @@ class GoogleSheetsService {
         "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sipades%40swift-height-432208-b3.iam.gserviceaccount.com"
       }
     ''');
+    // Membuat client untuk berkomunikasi dengan Google Sheets API menggunakan kredensial akun layanan
     final authClient = await clientViaServiceAccount(credentials, scopes);
-    _sheetsApi = sheets.SheetsApi(authClient);
+    _sheetsApi = sheets.SheetsApi(authClient); // Menginisialisasi SheetsApi dengan client yang telah dibuat
   }
 
+  // Fungsi untuk menghasilkan ID unik yang digunakan untuk setiap permintaan
   String _generateUniqueID() {
     final random = Random();
     return 'US-' + List.generate(12, (_) => random.nextInt(10)).join();
   }
 
+  // Fungsi untuk memeriksa apakah NIK dan KK sudah terdaftar di spreadsheet
   Future<bool> isNIKKKRegistered(String nik, String kk) async {
-    await _initializeSheetsApi();
-    final range = 'USERS!B2:C';
+    await _initializeSheetsApi(); // Pastikan SheetsApi sudah diinisialisasi
+    final range = 'USERS!B2:C'; // Rentang sel di spreadsheet yang akan diperiksa
     final response = await _sheetsApi!.spreadsheets.values.get(
       sheetId,
       range,
     );
-    final values = response.values ?? [];
+    final values = response.values ?? []; // Ambil nilai dari spreadsheet, default ke list kosong jika null
 
     bool isNIKRegistered = false;
     bool isKKRegistered = false;
 
+    // Memeriksa setiap baris data untuk menemukan NIK dan KK yang sesuai
     for (var row in values) {
       if (row.isNotEmpty) {
         if (row[0] == nik) {
@@ -59,14 +67,17 @@ class GoogleSheetsService {
       }
     }
 
+    // Mengembalikan true jika kedua NIK dan KK terdaftar, false sebaliknya
     return isNIKRegistered && isKKRegistered;
   }
 
+  // Fungsi untuk mencatat permintaan ke dalam spreadsheet
   Future<void> recordRequest(String sheetName, Map<String, dynamic> request) async {
-    await _initializeSheetsApi();
+    await _initializeSheetsApi(); // Pastikan SheetsApi sudah diinisialisasi
 
-    final uniqueId = _generateUniqueID();
+    final uniqueId = _generateUniqueID(); // Menghasilkan ID unik untuk permintaan
 
+    // Mempersiapkan data untuk dicatat di spreadsheet
     final values = [
       [
         uniqueId,
@@ -78,9 +89,10 @@ class GoogleSheetsService {
       ]
     ];
     final valueRange = sheets.ValueRange(
-      range: sheetName,
+      range: sheetName, // Nama sheet tempat data akan dicatat
       values: values,
     );
+    // Menambahkan data ke spreadsheet
     await _sheetsApi!.spreadsheets.values.append(
       valueRange,
       sheetId,
@@ -89,4 +101,3 @@ class GoogleSheetsService {
     );
   }
 }
-//

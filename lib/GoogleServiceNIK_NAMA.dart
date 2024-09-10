@@ -1,12 +1,17 @@
-import 'package:googleapis/sheets/v4.dart' as sheets;
-import 'package:googleapis_auth/auth_io.dart';
+import 'package:googleapis/sheets/v4.dart' as sheets; // Mengimpor library Google Sheets API
+import 'package:googleapis_auth/auth_io.dart'; // Mengimpor library untuk autentikasi Google API
 
+// Kelas untuk mengelola data pengguna dari Google Sheets
 class GoogleServiceNIK_NAMA {
+  // ID spreadsheet yang digunakan
   final String sheetId;
 
+  // Konstruktor untuk menginisialisasi dengan sheetId
   GoogleServiceNIK_NAMA({required this.sheetId});
 
+  // Fungsi untuk mengambil detail pengguna berdasarkan username
   Future<Map<String, String>> fetchUserDetails(String username) async {
+    // Kredensial akun layanan untuk autentikasi ke Google Sheets API
     final _credentials = ServiceAccountCredentials.fromJson(r'''
     {
         "private_key_id": "d3a0ca84f74d32aa62c97ffc024e5ff9453c4bcf",
@@ -21,19 +26,26 @@ class GoogleServiceNIK_NAMA {
     }
     ''');
 
+    // Scopes yang diperlukan untuk akses spreadsheet read-only
     final scopes = [sheets.SheetsApi.spreadsheetsReadonlyScope];
 
+    // Mendapatkan client yang terautentikasi menggunakan kredensial dan scope
     final authClient = await clientViaServiceAccount(_credentials, scopes);
 
+    // Membuat instance Sheets API
     final sheetsApi = sheets.SheetsApi(authClient);
+
+    // Mengambil data dari rentang yang ditentukan di spreadsheet
     final response = await sheetsApi.spreadsheets.values.get(
-      sheetId,
-      'USERS!B2:D',
+      sheetId, // ID spreadsheet yang digunakan
+      'USERS!B2:D', // Rentang sel yang diambil (kolom B sampai D mulai dari baris 2)
     );
 
+    // Menyimpan nilai yang diambil
     final values = response.values ?? [];
     final Map<String, String> userDetails = {};
 
+    // Mencari baris yang memiliki username yang cocok
     for (var row in values) {
       if (row.length > 2) {
         final usernameInSheet = row[0] as String? ?? '';
@@ -44,7 +56,6 @@ class GoogleServiceNIK_NAMA {
         }
       }
     }
-    return userDetails;
+    return userDetails; // Mengembalikan detail pengguna sebagai hasil
   }
 }
-//

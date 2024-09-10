@@ -1,12 +1,15 @@
 import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:googleapis_auth/auth_io.dart';
 
+// Kelas ini digunakan untuk mengambil data kabupaten dari Google Sheets
 class GoogleServiceAPI_Kabupaten {
-  final String sheetId;
+  final String sheetId; // ID dari Google Sheets yang akan diakses
 
   GoogleServiceAPI_Kabupaten({required this.sheetId});
 
+  // Fungsi untuk mengambil data kabupaten dari Google Sheets
   Future<List<String>> fetchKabupaten() async {
+    // Kredensial layanan akun yang berisi informasi kunci private dan email klien
     final _credentials = ServiceAccountCredentials.fromJson(r'''
     {
       "private_key_id": "d3a0ca84f74d32aa62c97ffc024e5ff9453c4bcf",
@@ -17,33 +20,43 @@ class GoogleServiceAPI_Kabupaten {
     }
     ''');
 
+    // Scopes yang diperlukan untuk mengakses data spreadsheet secara readonly
     final _scopes = [sheets.SheetsApi.spreadsheetsReadonlyScope];
+
+    // Membuat client API dengan menggunakan kredensial layanan
     final _client = await clientViaServiceAccount(_credentials, _scopes);
 
     final sheetsApi = sheets.SheetsApi(_client);
 
     try {
+      // Mengambil data dari sheet 'KABUPATEN', dimulai dari A1
       final response = await sheetsApi.spreadsheets.values.get(sheetId, 'KABUPATEN!A1:A');
       final rows = response.values;
 
+      // Daftar untuk menyimpan data kabupaten
       List<String> kabupatenList = [];
       if (rows != null) {
         for (var row in rows) {
           if (row.isNotEmpty) {
             String kabupaten = row[0] as String;
 
+            // Menghapus nomor urut dari data kabupaten jika ada
             kabupaten = kabupaten.replaceFirst(RegExp(r'^\d+\.\s*'), '');
 
-            if (!kabupaten.contains('Daftar Nama') && !kabupaten.contains('Daftar Provinsi') && !kabupaten.contains(':')) {
-              kabupatenList.add(kabupaten.trim());
+            // Memastikan data yang diambil bukanlah header atau metadata lainnya
+            if (!kabupaten.contains('Daftar Nama') &&
+                !kabupaten.contains('Daftar Provinsi') &&
+                !kabupaten.contains(':')) {
+              kabupatenList.add(kabupaten.trim()); // Menambahkan data kabupaten yang valid
             }
           }
         }
       }
       return kabupatenList;
     } catch (e) {
+      // Menangani error jika terjadi kesalahan dan mencetak pesan error
       print('Error fetching kabupaten data: $e');
-      rethrow;
+      rethrow; // Mengembalikan error untuk penanganan lebih lanjut
     }
   }
 }

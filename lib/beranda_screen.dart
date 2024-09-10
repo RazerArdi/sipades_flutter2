@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+// Mengimpor berbagai layanan dan fitur tambahan untuk aplikasi
 import 'Layanan/LayananUmum.dart';
 import 'Layanan/LayananNikah.dart';
 import 'Layanan/LayananLainnya.dart';
@@ -10,11 +11,14 @@ import 'FiturTambahan/JadwalSholatScreen.dart';
 import 'FiturTambahan/CuacaScreen.dart';
 import 'FiturTambahan/EventDesaScreen.dart';
 
+// Kelas utama untuk tampilan beranda aplikasi
 class BerandaScreen extends StatelessWidget {
-  final String username;
+  final String username; // Menyimpan nama pengguna
 
+  // Konstruktor untuk menerima nama pengguna
   const BerandaScreen({Key? key, required this.username}) : super(key: key);
 
+  // Fungsi untuk menentukan salam berdasarkan waktu saat ini
   String _getGreeting() {
     final hour = DateTime.now().hour;
     if (hour < 12) {
@@ -28,6 +32,7 @@ class BerandaScreen extends StatelessWidget {
     }
   }
 
+  // Fungsi untuk konfirmasi sebelum keluar dari aplikasi
   Future<bool> _onWillPop(BuildContext context) async {
     final shouldExit = await showDialog<bool>(
       context: context,
@@ -42,7 +47,7 @@ class BerandaScreen extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(true);
-              SystemNavigator.pop();
+              SystemNavigator.pop(); // Keluar dari aplikasi
             },
             child: const Text('Iya'),
           ),
@@ -55,27 +60,27 @@ class BerandaScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final greeting = _getGreeting();
+    final greeting = _getGreeting(); // Mendapatkan salam berdasarkan waktu
 
     return WillPopScope(
-      onWillPop: () => _onWillPop(context),
+      onWillPop: () => _onWillPop(context), // Menangani tombol kembali
       child: Scaffold(
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                margin: const EdgeInsets.all(16.0),
-                padding: const EdgeInsets.all(16.0),
+                margin: const EdgeInsets.all(16.0), // Margin di sekitar kontainer
+                padding: const EdgeInsets.all(16.0), // Padding di dalam kontainer
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0), // Radius sudut kontainer
+                  color: Colors.white, // Warna latar belakang
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(1.0),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, 3),
+                      color: Colors.grey.withOpacity(0.5), // Warna bayangan
+                      spreadRadius: 2, // Jarak sebar bayangan
+                      blurRadius: 5, // Jarak buram bayangan
+                      offset: const Offset(0, 3), // Offset bayangan
                     ),
                   ],
                 ),
@@ -83,7 +88,7 @@ class BerandaScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      greeting,
+                      greeting, // Menampilkan salam
                       style: const TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.bold,
@@ -91,7 +96,7 @@ class BerandaScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8.0),
                     Text(
-                      username,
+                      username, // Menampilkan nama pengguna
                       style: const TextStyle(
                         fontSize: 16.0,
                       ),
@@ -100,6 +105,7 @@ class BerandaScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // Menampilkan item layanan di baris pertama
                         Expanded(
                           child: _ServiceItem(
                             icon: Icons.mosque,
@@ -112,7 +118,7 @@ class BerandaScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        JadwalSholatScreen()),
+                                        JadwalSholatScreen()), // Navigasi ke layar jadwal sholat
                               );
                             },
                           ),
@@ -129,7 +135,7 @@ class BerandaScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => CuacaScreen()),
+                                    builder: (context) => CuacaScreen()), // Navigasi ke layar cuaca
                               );
                             },
                           ),
@@ -146,7 +152,7 @@ class BerandaScreen extends StatelessWidget {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => EventDesaScreen()),
+                                    builder: (context) => EventDesaScreen()), // Navigasi ke layar event desa
                               );
                             },
                           ),
@@ -157,13 +163,14 @@ class BerandaScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16.0),
+              // Menampilkan menu layanan dalam bentuk grid
               GridView.count(
                 shrinkWrap: true,
-                crossAxisCount: 3,
-                padding: const EdgeInsets.all(16.0),
-                childAspectRatio: 1.0,
-                mainAxisSpacing: 8.0,
-                crossAxisSpacing: 8.0,
+                crossAxisCount: 3, // Jumlah kolom dalam grid
+                padding: const EdgeInsets.all(16.0), // Padding di sekitar grid
+                childAspectRatio: 1.0, // Rasio aspek setiap item grid
+                mainAxisSpacing: 8.0, // Jarak vertikal antar item grid
+                crossAxisSpacing: 8.0, // Jarak horizontal antar item grid
                 children: [
                   _ServiceMenuItem(
                     icon: Icons.business,
@@ -172,7 +179,7 @@ class BerandaScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LayananUmum()),
+                        MaterialPageRoute(builder: (context) => LayananUmum()), // Navigasi ke layar layanan umum
                       );
                     },
                   ),
@@ -183,7 +190,7 @@ class BerandaScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LayananKependudukan()),
+                        MaterialPageRoute(builder: (context) => LayananKependudukan()), // Navigasi ke layar layanan kependudukan
                       );
                     },
                   ),
@@ -194,7 +201,7 @@ class BerandaScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LayananNikah()),
+                        MaterialPageRoute(builder: (context) => LayananNikah()), // Navigasi ke layar layanan nikah
                       );
                     },
                   ),
@@ -205,7 +212,7 @@ class BerandaScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => DomisiliHajiScreen()),
+                        MaterialPageRoute(builder: (context) => PertanahanScreen()), // Navigasi ke layar layanan pertanahan
                       );
                     },
                   ),
@@ -216,7 +223,7 @@ class BerandaScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => LayananLainnya()),
+                        MaterialPageRoute(builder: (context) => LayananLainnya()), // Navigasi ke layar layanan lainnya
                       );
                     },
                   ),
@@ -230,6 +237,7 @@ class BerandaScreen extends StatelessWidget {
   }
 }
 
+// Widget untuk menampilkan item layanan dengan ikon dan label
 class _ServiceItem extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -255,15 +263,15 @@ class _ServiceItem extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(12.0),
+        padding: const EdgeInsets.all(12.0), // Padding di dalam kontainer
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(8.0),
-          color: backgroundColor,
+          borderRadius: BorderRadius.circular(8.0), // Radius sudut kontainer
+          color: backgroundColor, // Warna latar belakang kontainer
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, size: iconSize, color: iconColor),
+            Icon(icon, size: iconSize, color: iconColor), // Menampilkan ikon
             const SizedBox(height: 4.0),
             Text(
               label,
@@ -272,7 +280,7 @@ class _ServiceItem extends StatelessWidget {
                 fontSize: 11.0,
                 color: labelColor,
               ),
-            ),
+            ), // Menampilkan label
           ],
         ),
       ),
@@ -280,6 +288,7 @@ class _ServiceItem extends StatelessWidget {
   }
 }
 
+// Widget untuk menampilkan menu layanan dalam bentuk grid
 class _ServiceMenuItem extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -302,19 +311,19 @@ class _ServiceMenuItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding: const EdgeInsets.all(12.0),
+            padding: const EdgeInsets.all(12.0), // Padding di dalam kontainer
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: backgroundColor,
+              shape: BoxShape.circle, // Bentuk kontainer
+              color: backgroundColor, // Warna latar belakang kontainer
             ),
-            child: Icon(icon, size: 40.0, color: Colors.white),
+            child: Icon(icon, size: 40.0, color: Colors.white), // Menampilkan ikon
           ),
           const SizedBox(height: 4.0),
           Text(
             label,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 12.0, color: Colors.black),
-          ),
+          ), // Menampilkan label
         ],
       ),
     );

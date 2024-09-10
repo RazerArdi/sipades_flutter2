@@ -1,10 +1,14 @@
-import 'dart:convert';
-import 'package:googleapis/sheets/v4.dart';
-import 'package:googleapis_auth/auth_io.dart';
+import 'dart:convert'; // Mengimpor library untuk mengonversi JSON
+import 'package:googleapis/sheets/v4.dart'; // Library Google Sheets API
+import 'package:googleapis_auth/auth_io.dart'; // Library untuk autentikasi Google API
 
+// Kelas utama yang mengelola data dari Google Sheets
 class GoogleService_AdminDataMasuk {
+  // ID spreadsheet Google Sheets yang digunakan
   final String _spreadsheetId = '145zImHcPjL-IsrVdfB_YVOFXsnnJQkGlYpAHcBv2RGI';
+  // Rentang data yang diambil dari Google Sheets (Kolom A sampai E)
   final String _range = 'PermintaanSurat!A:E';
+  // Kredensial akun layanan untuk autentikasi ke Google Sheets API
   final _credentials = r'''
   {
     "type": "service_account",
@@ -21,50 +25,62 @@ class GoogleService_AdminDataMasuk {
   }
   ''';
 
+  // Fungsi untuk mengambil data dari Google Sheets
   Future<List<Map<String, String>>> fetchData() async {
+    // Membuat kredensial dari JSON
     final accountCredentials = ServiceAccountCredentials.fromJson(jsonDecode(_credentials));
+    // Scopes adalah izin yang dibutuhkan aplikasi ini (hanya read-only dalam hal ini)
     final scopes = [SheetsApi.spreadsheetsReadonlyScope];
 
+    // Autentikasi menggunakan service account untuk mendapatkan client
     final authClient = await clientViaServiceAccount(accountCredentials, scopes);
 
+    // Menggunakan Sheets API dengan autentikasi yang sudah didapat
     final sheetsApi = SheetsApi(authClient);
 
+    // Mengambil data dari Google Sheets sesuai rentang yang ditentukan
     final response = await sheetsApi.spreadsheets.values.get(_spreadsheetId, _range);
 
+    // Menyimpan data yang didapat
     final rows = response.values ?? [];
     final List<Map<String, String>> data = [];
 
+    // Jika ada data, ambil header dari baris pertama
     if (rows.isNotEmpty) {
       final headers = rows.first.map((e) => e.toString()).toList();
 
+      // Iterasi setiap baris mulai dari baris kedua
       for (int i = 1; i < rows.length; i++) {
         final row = rows[i];
         final Map<String, String> rowData = {};
 
+        // Iterasi setiap kolom di baris untuk dipasangkan dengan header
         for (int j = 0; j < row.length; j++) {
           rowData[headers[j]] = row[j].toString();
         }
-        data.add(rowData);
+        data.add(rowData); // Menambahkan data baris ke dalam daftar data
       }
     }
 
-    return data;
+    return data; // Kembalikan daftar data sebagai hasil
   }
 
+  // Fungsi untuk memperbarui status berdasarkan ID
   Future<void> updateStatus(String id, String newStatus) async {
+    // Autentikasi dan izin untuk mengedit data di Google Sheets
     final accountCredentials = ServiceAccountCredentials.fromJson(jsonDecode(_credentials));
     final scopes = [SheetsApi.spreadsheetsScope];
 
     final authClient = await clientViaServiceAccount(accountCredentials, scopes);
-
     final sheetsApi = SheetsApi(authClient);
 
-    // Determine the range for updating the status
+    // Ambil semua data dari Google Sheets untuk menemukan baris yang akan di-update
     final response = await sheetsApi.spreadsheets.values.get(_spreadsheetId, _range);
     final rows = response.values ?? [];
     final headers = rows.isNotEmpty ? rows.first : [];
 
     int rowIndex = -1;
+    // Cari baris yang memiliki ID yang cocok
     for (int i = 1; i < rows.length; i++) {
       final row = rows[i];
       final Map<String, String> rowData = {};
@@ -77,6 +93,7 @@ class GoogleService_AdminDataMasuk {
       }
     }
 
+    // Jika baris ditemukan, perbarui kolom status
     if (rowIndex != -1) {
       final statusColumnIndex = headers.indexOf('Status');
       final rangeToUpdate = 'PermintaanSurat!${_getCellAddress(rowIndex + 1, statusColumnIndex + 1)}';
@@ -97,8 +114,9 @@ class GoogleService_AdminDataMasuk {
     }
   }
 
+  // Fungsi untuk mengonversi nomor baris dan kolom menjadi alamat sel
   String _getCellAddress(int row, int col) {
     final columnLetter = String.fromCharCode('A'.codeUnitAt(0) + col - 1);
-    return '$columnLetter$row';
+    return '$columnLetter$row'; // Mengembalikan alamat sel dalam format "KolomBaris"
   }
 }

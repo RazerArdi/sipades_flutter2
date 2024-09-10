@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/services.dart';
 
+// Halaman bantuan untuk admin
 class AdminBantuanScreen extends StatelessWidget {
   const AdminBantuanScreen({Key? key}) : super(key: key);
 
+  // Method untuk menampilkan dialog konfirmasi saat mencoba keluar dari halaman
   Future<bool> _onWillPop(BuildContext context) async {
     final shouldExit = await showDialog<bool>(
       context: context,
@@ -12,14 +14,16 @@ class AdminBantuanScreen extends StatelessWidget {
         title: const Text('Konfirmasi'),
         content: const Text('Apakah Anda yakin ingin keluar dari halaman ini?'),
         actions: [
+          // Tombol untuk tidak keluar
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
             child: const Text('Tidak'),
           ),
+          // Tombol untuk keluar dari aplikasi
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(true);
-              SystemNavigator.pop();
+              Navigator.of(context).pop(true); // Tutup dialog
+              SystemNavigator.pop(); // Keluar dari aplikasi
             },
             child: const Text('Iya'),
           ),
@@ -33,17 +37,18 @@ class AdminBantuanScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => _onWillPop(context),
+      onWillPop: () => _onWillPop(context), // Mengatur aksi saat tombol back ditekan
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Bantuan Admin'),
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: false, // Menghilangkan tombol kembali default
         ),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // Judul bagian bantuan
               const Text(
                 'Pusat Bantuan',
                 style: TextStyle(
@@ -51,21 +56,24 @@ class AdminBantuanScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 16.0), // Jarak antara judul dan teks berikutnya
+              // Instruksi untuk menghubungi tim bantuan
               const Text(
                 'Kamu dapat menghubungi kami melalui:',
                 style: TextStyle(
                   fontSize: 16.0,
                 ),
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 16.0), // Jarak antara instruksi dan item kontak
+              // Widget untuk menampilkan item kontak WhatsApp
               _ContactItem(
                 icon: Icons.phone,
                 label: 'WhatsApp Developer',
                 phoneNumber: '6281330483643',
                 contactInfo: '6281330483643',
               ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 16.0), // Jarak antara item kontak
+              // Widget untuk menampilkan item kontak Email
               _ContactItem(
                 icon: Icons.email,
                 label: 'Email Developer',
@@ -80,6 +88,7 @@ class AdminBantuanScreen extends StatelessWidget {
   }
 }
 
+// Widget untuk menampilkan item kontak
 class _ContactItem extends StatelessWidget {
   final IconData icon;
   final String label;
@@ -96,6 +105,7 @@ class _ContactItem extends StatelessWidget {
     required this.contactInfo,
   }) : super(key: key);
 
+  // Method untuk membuka URL sesuai dengan tipe kontak
   void _launchURL(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
@@ -110,10 +120,10 @@ class _ContactItem extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         if (phoneNumber != null) {
-          final whatsappUrl = 'https://wa.me/$phoneNumber';
+          final whatsappUrl = 'https://wa.me/$phoneNumber'; // URL WhatsApp
           _launchURL(whatsappUrl);
         } else if (email != null) {
-          final emailUrl = 'mailto:$email';
+          final emailUrl = 'mailto:$email'; // URL Email
           _launchURL(emailUrl);
         }
       },
@@ -134,6 +144,7 @@ class _ContactItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // Baris yang menampilkan ikon dan label
             Row(
               children: [
                 Icon(icon, size: 32.0, color: Colors.purple),
@@ -146,7 +157,8 @@ class _ContactItem extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8.0),
+            const SizedBox(height: 8.0), // Jarak antara ikon dan info kontak
+            // Menampilkan informasi kontak
             Text(
               contactInfo,
               style: const TextStyle(

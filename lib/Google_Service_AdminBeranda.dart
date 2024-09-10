@@ -4,12 +4,15 @@ import 'package:intl/intl.dart';
 import 'dart:convert';
 
 class Google_Service_AdminBeranda {
+  // ID spreadsheet Google Sheets yang digunakan
   final String _spreadsheetId = '145zImHcPjL-IsrVdfB_YVOFXsnnJQkGlYpAHcBv2RGI';
+  // Rentang data yang akan diambil
   final String _rangeSessionSummary = 'PermintaanSurat!B2:B';
   final String _rangeDemographicData = 'DATA!H2:H';
   final String _rangeTotalPopulation = 'DATA!A2:A';
   final String _rangeSuccessRate = 'PermintaanSurat!E2:E';
 
+  // Kredensial akun layanan untuk mengakses Google Sheets API
   final _credentials = '''
 {
   "type": "service_account",
@@ -26,11 +29,12 @@ class Google_Service_AdminBeranda {
 }
 ''';
 
-
+  // Fungsi untuk mengambil data demografis dari Google Sheets
   Future<List<DemographicData>> getDemographicData() async {
     final client = await _getAuthClient();
     final sheetsApi = sheets.SheetsApi(client);
 
+    // Ambil data dari sheet dengan rentang yang telah ditentukan
     final response = await sheetsApi.spreadsheets.values.get(
       _spreadsheetId,
       _rangeDemographicData,
@@ -39,25 +43,27 @@ class Google_Service_AdminBeranda {
     final values = response.values ?? [];
     return values.map((row) {
       final dateString = row[0] as String;
-      print('Date String: $dateString');
+      print('Date String: $dateString'); // Debug log untuk tanggal
 
       final dateOfBirth = DateFormat('dd/MM/yyyy').parse(dateString);
-      final age = _calculateAge(dateOfBirth);
+      final age = _calculateAge(dateOfBirth); // Hitung umur berdasarkan tanggal lahir
       final label = row[1] as String;
       return DemographicData(label: label, value: age.toDouble());
     }).toList();
   }
 
-
+  // Fungsi untuk menghitung umur berdasarkan tanggal lahir
   int _calculateAge(DateTime dateOfBirth) {
     final now = DateTime.now();
     int age = now.year - dateOfBirth.year;
+    // Cek apakah bulan dan tanggal sekarang lebih kecil dari tanggal lahir
     if (now.month < dateOfBirth.month || (now.month == dateOfBirth.month && now.day < dateOfBirth.day)) {
-      age--;
+      age--; // Kurangi usia jika belum melewati ulang tahun tahun ini
     }
     return age;
   }
 
+  // Fungsi untuk mengambil ringkasan sesi
   Future<List<ChartData>> getSessionSummary() async {
     final client = await _getAuthClient();
     final sheetsApi = sheets.SheetsApi(client);
@@ -68,12 +74,12 @@ class Google_Service_AdminBeranda {
     );
 
     final values = response.values ?? [];
-    print('Session Summary: $values'); // Debug print
+    print('Session Summary: $values'); // Debug log untuk ringkasan sesi
 
     return values.map((row) {
-      // Ensure the row has the expected number of columns
+      // Pastikan row memiliki kolom yang cukup
       if (row.length < 2) {
-        print('Skipping row with insufficient data: $row'); // Debug print
+        print('Skipping row with insufficient data: $row'); // Debug log jika data tidak cukup
         return ChartData(date: DateTime.now(), count: 0);
       }
 
@@ -83,7 +89,7 @@ class Google_Service_AdminBeranda {
     }).toList();
   }
 
-
+  // Fungsi untuk menghitung total populasi dari data yang diambil
   Future<int> getTotalPopulation() async {
     final client = await _getAuthClient();
     final sheetsApi = sheets.SheetsApi(client);
@@ -94,9 +100,10 @@ class Google_Service_AdminBeranda {
     );
 
     final values = response.values ?? [];
-    return values.length;
+    return values.length; // Kembalikan jumlah baris sebagai total populasi
   }
 
+  // Fungsi untuk menghitung tingkat kesuksesan/berhasil
   Future<double> getSuccessRate() async {
     final client = await _getAuthClient();
     final sheetsApi = sheets.SheetsApi(client);
@@ -111,10 +118,11 @@ class Google_Service_AdminBeranda {
 
     if (successValues.isEmpty) return 0.0;
 
-    final total = successValues.reduce((a, b) => a + b);
-    return total / successValues.length;
+    final total = successValues.reduce((a, b) => a + b); // Jumlahkan semua nilai sukses/berhasil
+    return total / successValues.length; // Hitung rata-rata tingkat kesuksesan
   }
 
+  // Fungsi untuk otentikasi ke Google Sheets API menggunakan akun layanan
   Future<AuthClient> _getAuthClient() async {
     final credentials = ServiceAccountCredentials.fromJson(_credentials);
     final scopes = [sheets.SheetsApi.spreadsheetsScope];
@@ -122,6 +130,7 @@ class Google_Service_AdminBeranda {
   }
 }
 
+// Kelas untuk data demografis
 class DemographicData {
   final String label;
   final double value;
@@ -129,10 +138,10 @@ class DemographicData {
   DemographicData({required this.label, required this.value});
 }
 
+// Kelas untuk data grafik
 class ChartData {
   final DateTime date;
   final int count;
 
   ChartData({required this.date, required this.count});
 }
-

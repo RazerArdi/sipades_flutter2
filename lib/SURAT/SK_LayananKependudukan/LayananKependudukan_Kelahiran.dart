@@ -4,6 +4,7 @@ import 'KELAHIRAN/Klan_FormulirPermohonanAktaKelahiran.dart';
 import 'KELAHIRAN/Klan_SuratPernyataanKelahiran.dart';
 import 'KELAHIRAN/Klan_FormulirPengajuanPerubahanAktaKelahiran.dart';
 
+// Widget utama untuk menampilkan layanan terkait kelahiran
 class LayananKependudukanKelahiran extends StatefulWidget {
   @override
   _LayananKependudukanKelahiranState createState() =>
@@ -12,6 +13,7 @@ class LayananKependudukanKelahiran extends StatefulWidget {
 
 class _LayananKependudukanKelahiranState
     extends State<LayananKependudukanKelahiran> {
+  // Daftar item layanan yang akan ditampilkan
   final List<Map<String, String>> _items = [
     {'title': 'Surat Keterangan Kelahiran', 'route': '/suratKeteranganKelahiran'},
     {'title': 'Formulir Permohonan Akta Kelahiran (F-2.01)', 'route': '/formulirPermohonanAktaKelahiran'},
@@ -19,19 +21,24 @@ class _LayananKependudukanKelahiranState
     {'title': 'Formulir Pengajuan Perubahan Akta Kelahiran (F-2.03)', 'route': '/formulirPengajuanPerubahanAktaKelahiran'},
   ];
 
+  // Daftar item yang sudah difilter berdasarkan query pencarian
   List<Map<String, String>> _filteredItems = [];
 
   @override
   void initState() {
     super.initState();
+    // Inisialisasi _filteredItems dengan nilai awal dari _items
     _filteredItems = _items;
   }
 
+  // Fungsi untuk memfilter item berdasarkan query pencarian
   void _filterItems(String query) {
     setState(() {
       if (query.isEmpty) {
+        // Jika query kosong, tampilkan semua item
         _filteredItems = _items;
       } else {
+        // Filter item yang mengandung query pada judul
         _filteredItems = _items
             .where((item) =>
             item['title']!.toLowerCase().contains(query.toLowerCase()))
@@ -47,16 +54,16 @@ class _LayananKependudukanKelahiranState
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context); // Kembali ke halaman sebelumnya
           },
         ),
-        title: const Text('Kelahiran'),
-        backgroundColor: Colors.black,
+        title: const Text('Kelahiran'), // Judul pada AppBar
+        backgroundColor: Colors.black, // Warna latar belakang AppBar
         centerTitle: true,
-        iconTheme: const IconThemeData(color: Colors.white),
+        iconTheme: const IconThemeData(color: Colors.white), // Warna ikon pada AppBar
         titleTextStyle: const TextStyle(
           color: Colors.white,
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.bold, // Gaya teks judul AppBar
         ),
       ),
       body: Column(
@@ -64,28 +71,29 @@ class _LayananKependudukanKelahiranState
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
-              onChanged: _filterItems,
+              onChanged: _filterItems, // Memanggil fungsi _filterItems saat teks berubah
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Colors.white,
-                hintText: 'Cari Formulir Kelahiran...',
-                prefixIcon: const Icon(Icons.search),
+                fillColor: Colors.white, // Warna latar belakang TextField
+                hintText: 'Cari Formulir Kelahiran...', // Teks petunjuk pada TextField
+                prefixIcon: const Icon(Icons.search), // Ikon pencarian pada TextField
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide.none,
+                  borderRadius: BorderRadius.circular(20), // Sudut border TextField
+                  borderSide: BorderSide.none, // Menghilangkan border default
                 ),
               ),
             ),
           ),
           Expanded(
             child: ListView.builder(
-              itemCount: _filteredItems.length,
+              itemCount: _filteredItems.length, // Jumlah item yang ditampilkan
               itemBuilder: (context, index) {
                 final item = _filteredItems[index];
                 return _Item(
-                  icon: Icons.person,
+                  icon: Icons.person, // Ikon untuk setiap item
                   title: item['title']!,
                   onTap: () {
+                    // Menavigasi ke halaman detail berdasarkan route item
                     _navigateToDetailPage(context, item['route']!);
                   },
                 );
@@ -97,11 +105,13 @@ class _LayananKependudukanKelahiranState
     );
   }
 
+  // Fungsi untuk menavigasi ke halaman detail berdasarkan route
   void _navigateToDetailPage(BuildContext context, String route) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) {
+          // Menentukan widget yang akan ditampilkan berdasarkan route
           switch (route) {
             case '/suratKeteranganKelahiran':
               return Klan_SuratKeteranganKelahiran();
@@ -112,8 +122,9 @@ class _LayananKependudukanKelahiranState
             case '/formulirPengajuanPerubahanAktaKelahiran':
               return Klan_FormulirPengajuanPerubahanAktaKelahiran();
             default:
+            // Menampilkan halaman default jika route tidak ditemukan
               return Scaffold(
-                body: Center(child: Text('Page not found')),
+                body: Center(child: Text('Halaman tidak ditemukan')),
               );
           }
         },
@@ -122,6 +133,7 @@ class _LayananKependudukanKelahiranState
   }
 }
 
+// Widget untuk menampilkan item pada daftar layanan
 class _Item extends StatelessWidget {
   const _Item({
     Key? key,
@@ -130,25 +142,25 @@ class _Item extends StatelessWidget {
     required this.onTap,
   }) : super(key: key);
 
-  final IconData icon;
-  final String title;
-  final VoidCallback onTap;
+  final IconData icon; // Ikon yang ditampilkan di samping judul
+  final String title; // Judul item
+  final VoidCallback onTap; // Fungsi yang dipanggil saat item ditekan
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTap, // Menangani aksi tap pada item
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 8.0),
         padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
+          color: Colors.white, // Warna latar belakang item
+          borderRadius: BorderRadius.circular(8.0), // Sudut border item
           boxShadow: const [
             BoxShadow(
               color: Colors.grey,
               blurRadius: 4.0,
-              offset: Offset(0.0, 2.0),
+              offset: Offset(0.0, 2.0), // Bayangan di bawah item
             ),
           ],
         ),
@@ -157,9 +169,9 @@ class _Item extends StatelessWidget {
             Icon(
               icon,
               size: 40.0,
-              color: Colors.black,
+              color: Colors.black, // Warna ikon
             ),
-            const SizedBox(width: 16.0),
+            const SizedBox(width: 16.0), // Jarak antara ikon dan teks
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +180,7 @@ class _Item extends StatelessWidget {
                     title,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16.0,
+                      fontSize: 16.0, // Ukuran font judul
                     ),
                   ),
                 ],

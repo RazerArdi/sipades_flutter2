@@ -7,6 +7,7 @@ import 'AdminContactDialog.dart';
 import 'FAQScreen.dart';
 import 'PrivacyPolicyScreen.dart';
 
+// Halaman Profil Admin
 class AdminProfilScreen extends StatefulWidget {
   const AdminProfilScreen({Key? key}) : super(key: key);
 
@@ -16,19 +17,21 @@ class AdminProfilScreen extends StatefulWidget {
 
 class _AdminProfilScreenState extends State<AdminProfilScreen> {
 
+  // Method untuk menghapus cache aplikasi
   Future<void> _clearCache() async {
     try {
-      await CacheManager.clearCache();
+      await CacheManager.clearCache(); // Menghapus cache
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Cache berhasil dihapus')),
+        const SnackBar(content: Text('Cache berhasil dihapus')), // Menampilkan notifikasi jika berhasil
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Gagal menghapus cache')),
+        const SnackBar(content: Text('Gagal menghapus cache')), // Menampilkan notifikasi jika gagal
       );
     }
   }
 
+  // Method untuk menampilkan dialog konfirmasi saat keluar dari halaman
   Future<bool> _onWillPop() async {
     final shouldExit = await showDialog<bool>(
       context: context,
@@ -37,13 +40,13 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
         content: const Text('Apakah Anda yakin ingin keluar dari halaman ini?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
+            onPressed: () => Navigator.of(context).pop(false), // Tidak keluar dari halaman
             child: const Text('Tidak'),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(true);
-              SystemNavigator.pop();
+              SystemNavigator.pop(); // Keluar dari aplikasi
             },
             child: const Text('Iya'),
           ),
@@ -51,9 +54,10 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
       ),
     );
 
-    return shouldExit ?? false;
+    return shouldExit ?? false; // Mengembalikan keputusan pengguna
   }
 
+  // Method untuk menampilkan dialog konfirmasi saat logout
   Future<void> _showLogoutConfirmation() async {
     final shouldLogout = await showDialog<bool>(
       context: context,
@@ -62,7 +66,7 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
         content: const Text('Apakah Anda yakin ingin keluar dari aplikasi?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
+            onPressed: () => Navigator.of(context).pop(false), // Tidak logout
             child: const Text('Tidak'),
           ),
           TextButton(
@@ -70,8 +74,8 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
               Navigator.of(context).pop(true);
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => MyHomePage()),
-                    (Route<dynamic> route) => false,
+                MaterialPageRoute(builder: (context) => MyHomePage()), // Mengarahkan ke halaman utama
+                    (Route<dynamic> route) => false, // Menghapus semua halaman sebelumnya
               );
             },
             child: const Text('Iya'),
@@ -81,33 +85,33 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
     );
 
     if (shouldLogout ?? false) {
-      // Perform logout actions here if needed
+      // Lakukan aksi logout di sini jika diperlukan
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: _onWillPop,
+      onWillPop: _onWillPop, // Mengatur aksi saat tombol kembali ditekan
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Profil Admin'),
-          automaticallyImplyLeading: false,
+          title: const Text('Profil Admin'), // Judul halaman
+          automaticallyImplyLeading: false, // Menghilangkan tombol kembali default di AppBar
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0), // Memberikan jarak di sekitar konten
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start, // Menyusun elemen dari kiri ke kanan
               children: [
-                const SizedBox(height: 40),
+                const SizedBox(height: 40), // Jarak atas
                 Center(
                   child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: AssetImage('assets/images/user.png'),
+                    radius: 50, // Radius avatar
+                    backgroundImage: AssetImage('assets/images/user.png'), // Gambar profil
                   ),
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 20), // Jarak antara avatar dan teks
                 const Text(
                   'ADMIN',
                   style: TextStyle(
@@ -124,6 +128,7 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                // Menampilkan informasi akun dengan ListTile
                 ListTile(
                   leading: Icon(Icons.perm_identity),
                   title: Text('ID NIK'),
@@ -143,11 +148,12 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
                   ),
                 ),
                 const SizedBox(height: 16),
+                // Menampilkan opsi-opsi dengan ListTile yang dapat diklik
                 _buildProfileItem(
                   icon: Icons.delete_sweep,
                   title: 'Hapus Cache',
                   trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: _clearCache,
+                  onTap: _clearCache, // Menjalankan fungsi hapus cache
                 ),
                 _buildProfileItem(
                   icon: Icons.info,
@@ -156,7 +162,7 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (context) => AboutUsDialog(),
+                      builder: (context) => AboutUsDialog(), // Menampilkan dialog tentang kami
                     );
                   },
                 ),
@@ -167,7 +173,7 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => FAQScreen()),
+                      MaterialPageRoute(builder: (context) => FAQScreen()), // Mengarahkan ke halaman FAQ
                     );
                   },
                 ),
@@ -178,7 +184,7 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
+                      MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()), // Mengarahkan ke halaman kebijakan privasi
                     );
                   },
                 ),
@@ -189,18 +195,19 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
                   onTap: () {
                     showDialog(
                       context: context,
-                      builder: (context) => AdminContactDialog(),
+                      builder: (context) => AdminContactDialog(), // Menampilkan dialog kontak admin
                     );
                   },
                 ),
                 const SizedBox(height: 20),
+                // Tombol untuk logout
                 Center(
                   child: ElevatedButton(
-                    onPressed: _showLogoutConfirmation,
+                    onPressed: _showLogoutConfirmation, // Menampilkan konfirmasi logout
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
-                      textStyle: const TextStyle(fontSize: 16),
+                      backgroundColor: Colors.red, // Warna tombol
+                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16), // Padding tombol
+                      textStyle: const TextStyle(fontSize: 16), // Ukuran teks tombol
                     ),
                     child: const Text('Log Out'),
                   ),
@@ -213,6 +220,7 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
     );
   }
 
+  // Method untuk membangun item profil dengan ikon, judul, dan aksi klik
   Widget _buildProfileItem({
     required IconData icon,
     required String title,
@@ -223,20 +231,20 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
     return Column(
       children: [
         ListTile(
-          leading: Icon(icon),
+          leading: Icon(icon), // Ikon di samping kiri
           title: Text(
             title,
             style: const TextStyle(
-              fontWeight: FontWeight.bold,
+              fontWeight: FontWeight.bold, // Menebalkan teks judul
             ),
           ),
-          subtitle: subtitle != null ? Text(subtitle) : null,
-          trailing: trailing,
-          onTap: onTap,
+          subtitle: subtitle != null ? Text(subtitle) : null, // Menampilkan subtitle jika ada
+          trailing: trailing, // Widget di samping kanan
+          onTap: onTap, // Aksi klik
         ),
         const Divider(
-          color: Colors.grey,
-          thickness: 1.0,
+          color: Colors.grey, // Warna pembatas
+          thickness: 1.0, // Ketebalan pembatas
         ),
       ],
     );

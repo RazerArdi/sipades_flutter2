@@ -1,12 +1,15 @@
 import 'package:googleapis/sheets/v4.dart' as sheets;
 import 'package:googleapis_auth/auth_io.dart';
 
+// Kelas ini digunakan untuk mengambil data pendidikan dari Google Sheets
 class GoogleService_Pendidikan {
-  final String sheetId;
+  final String sheetId; // ID dari Google Sheets yang akan diakses
 
   GoogleService_Pendidikan({required this.sheetId});
 
+  // Fungsi untuk mengambil data pendidikan dari Google Sheets
   Future<List<String>> fetchPendidikan() async {
+    // Kredensial layanan akun yang berisi informasi kunci private dan email klien
     final _credentials = ServiceAccountCredentials.fromJson(r'''
     {
       "private_key_id": "d3a0ca84f74d32aa62c97ffc024e5ff9453c4bcf",
@@ -17,31 +20,40 @@ class GoogleService_Pendidikan {
     }
     ''');
 
+    // Scopes yang diperlukan untuk mengakses data spreadsheet secara readonly
     final _scopes = [sheets.SheetsApi.spreadsheetsReadonlyScope];
+
+    // Membuat client API dengan menggunakan kredensial layanan
     final _client = await clientViaServiceAccount(_credentials, _scopes);
 
     final sheetsApi = sheets.SheetsApi(_client);
 
     try {
+      // Mengambil data dari sheet 'PENDIDIKAN', dimulai dari B2
       final response = await sheetsApi.spreadsheets.values.get(sheetId, 'PENDIDIKAN!B2:B');
       final rows = response.values;
 
+      // Daftar untuk menyimpan data pendidikan
       List<String> pendidikanList = [];
       if (rows != null) {
         for (var row in rows) {
           if (row.isNotEmpty) {
             String pendidikan = row[0] as String;
 
-            if (!pendidikan.contains('Daftar Nama') && !pendidikan.contains('Daftar Provinsi') && !pendidikan.contains(':')) {
-              pendidikanList.add(pendidikan.trim());
+            // Memastikan data yang diambil bukanlah header atau metadata lainnya
+            if (!pendidikan.contains('Daftar Nama') &&
+                !pendidikan.contains('Daftar Provinsi') &&
+                !pendidikan.contains(':')) {
+              pendidikanList.add(pendidikan.trim()); // Menambahkan data pendidikan yang valid
             }
           }
         }
       }
       return pendidikanList;
     } catch (e) {
+      // Menangani error jika terjadi kesalahan dan mencetak pesan error
       print('Error fetching pendidikan data: $e');
-      rethrow;
+      rethrow; // Mengembalikan error untuk penanganan lebih lanjut
     }
   }
 }

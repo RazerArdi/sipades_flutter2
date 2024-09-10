@@ -1,13 +1,15 @@
-import 'package:googleapis/sheets/v4.dart' as sheets;
-import 'package:googleapis_auth/auth_io.dart';
+import 'package:googleapis/sheets/v4.dart' as sheets; // Mengimpor library untuk berinteraksi dengan Google Sheets API
+import 'package:googleapis_auth/auth_io.dart'; // Mengimpor library untuk autentikasi menggunakan Google APIs
 
-
+// Kelas ini menyediakan layanan untuk berinteraksi dengan Google Sheets untuk login
 class GoogleSheetsServiceLOGIN {
-  final String sheetId;
+  final String sheetId; // ID dari spreadsheet yang akan diakses
 
   GoogleSheetsServiceLOGIN({required this.sheetId});
 
+  // Fungsi untuk mengambil kredensial dari Google Sheets berdasarkan rentang (range) yang diberikan
   Future<Map<String, String>> fetchCredentials(String range) async {
+    // Mendefinisikan kredensial akun layanan (service account) untuk autentikasi
     final _credentials = ServiceAccountCredentials.fromJson(r'''
     {
       "private_key_id": "d3a0ca84f74d32aa62c97ffc024e5ff9453c4bcf",
@@ -18,29 +20,37 @@ class GoogleSheetsServiceLOGIN {
     }
     ''');
 
+    // Mendefinisikan scope akses untuk Google Sheets API
     final _scopes = [sheets.SheetsApi.spreadsheetsReadonlyScope];
+
+    // Membuat client yang digunakan untuk berkomunikasi dengan Google Sheets API
     final _client = await clientViaServiceAccount(_credentials, _scopes);
 
+    // Membuat instance SheetsApi untuk mengakses Google Sheets
     final sheetsApi = sheets.SheetsApi(_client);
 
     try {
+      // Mengambil data dari spreadsheet sesuai dengan rentang yang diberikan
       final response = await sheetsApi.spreadsheets.values.get(sheetId, range);
       final rows = response.values;
 
+      // Membuat map untuk menyimpan kredensial yang diambil dari spreadsheet
       Map<String, String> credentials = {};
       if (rows != null) {
         for (var row in rows) {
           if (row.length >= 2) {
+            // Mengasumsikan kolom pertama adalah username dan kolom kedua adalah password
             credentials[row[0] as String] = row[1] as String;
           }
         }
       }
       return credentials;
     } catch (e) {
-      print('Error fetching data: $e');
-      rethrow;
+      print('Error fetching data: $e'); // Menampilkan pesan kesalahan jika terjadi error
+      rethrow; // Melempar kembali exception untuk ditangani di tempat lain
     }
   }
 
+  // Fungsi placeholder untuk mengambil detail pengguna berdasarkan username
   fetchUserDetails(String username) {}
-}//
+}
