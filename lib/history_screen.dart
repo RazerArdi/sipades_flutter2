@@ -320,7 +320,7 @@ class _TransactionItem extends StatelessWidget {
       ),
     );
   }
-
+//
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Berhasil':
