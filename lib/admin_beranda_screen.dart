@@ -54,8 +54,8 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
       setState(() {
         _chartData = sessionData;
         _demographicData = demographicData;
-        _totalPopulation = totalPopulation;
-        _successRate = successRate;
+        _totalPopulation = totalPopulation; // Periksa apakah total populasi dihitung dengan benar
+        _successRate = successRate; // Periksa apakah tingkat kesuksesan dihitung dengan benar
         _filteredChartData = _filterChartData(sessionData);
         _isLoading = false; // Menandakan bahwa data sudah dimuat
       });
@@ -66,6 +66,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
       });
     }
   }
+
 
   // Method untuk memfilter data grafik berdasarkan rentang tanggal yang dipilih
   List<ChartData> _filterChartData(List<ChartData> data) {
@@ -305,7 +306,7 @@ class _AdminBerandaScreenState extends State<AdminBerandaScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              const Text('Daily Average'),
+                              const Text('Total Terdaftar'),
                             ],
                           ),
                         ),

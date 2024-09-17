@@ -114,6 +114,7 @@ class _AdminProfilScreenState extends State<AdminProfilScreen> {
                 const SizedBox(height: 20), // Jarak antara avatar dan teks
                 const Text(
                   'ADMIN',
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,

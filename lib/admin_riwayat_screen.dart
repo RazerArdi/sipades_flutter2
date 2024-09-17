@@ -246,7 +246,7 @@ class _RiwayatListState extends State<RiwayatList> {
     });
   }
 
-  // Mendapatkan warna berdasarkan status
+  // Mengambil warna status berdasarkan status
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Menunggu Diproses':
@@ -296,72 +296,93 @@ class _RiwayatListState extends State<RiwayatList> {
     }
   }
 
+  // Menangani tombol generate surat
+  void _generateSurat(Map<String, String> item) {
+    // Logika untuk generate surat berdasarkan item
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Generate Surat for ${item['Nama Lengkap']}')),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: TextField(
-            decoration: InputDecoration(
-              labelText: 'Cari Berdasarkan Nama',
-              border: OutlineInputBorder(),
-              prefixIcon: Icon(Icons.search),
+        Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Cari Berdasarkan Nama',
+                  border: OutlineInputBorder(),
+                  prefixIcon: Icon(Icons.search),
+                ),
+                onChanged: _onSearchQueryChanged, // Menangani perubahan query pencarian
+              ),
             ),
-            onChanged: _onSearchQueryChanged, // Menangani perubahan query pencarian
-          ),
-        ),
-        Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.all(8.0),
-            itemCount: filteredData.length,
-            itemBuilder: (context, index) {
-              final item = filteredData[index];
-              final statusColor = _getStatusColor(item['Status'] ?? '');
+            Expanded(
+              child: ListView.builder(
+                padding: const EdgeInsets.all(8.0),
+                itemCount: filteredData.length,
+                itemBuilder: (context, index) {
+                  final item = filteredData[index];
+                  final statusColor = _getStatusColor(item['Status'] ?? '');
 
-              return Container(
-                margin: const EdgeInsets.symmetric(vertical: 8.0),
-                padding: const EdgeInsets.all(12.0),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8.0),
-                  color: Colors.white,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item['Nama Lengkap'] ?? '',
-                      style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                  return Container(
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(8.0),
+                      color: Colors.white,
                     ),
-                    const SizedBox(height: 8.0),
-                    Divider(color: Colors.grey[300]),
-                    const SizedBox(height: 8.0),
-                    Text('Waktu: ${item['Waktu']}'),
-                    const SizedBox(height: 4.0),
-                    Text('Tanggal: ${item['Tanggal']}'),
-                    const SizedBox(height: 4.0),
-                    Text('Jenis Surat: ${item['Jenis Surat']}'),
-                    const SizedBox(height: 8.0),
-                    GestureDetector(
-                      onTap: () => _changeStatus(context, item), // Menangani tap untuk mengubah status
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                        decoration: BoxDecoration(
-                          color: statusColor,
-                          borderRadius: BorderRadius.circular(4.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item['Nama Lengkap'] ?? '',
+                          style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                         ),
-                        child: Text(
-                          item['Status'] ?? '',
-                          style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                        const SizedBox(height: 8.0),
+                        Divider(color: Colors.grey[300]),
+                        const SizedBox(height: 8.0),
+                        Text('Waktu: ${item['Waktu']}'),
+                        const SizedBox(height: 4.0),
+                        Text('Tanggal: ${item['Tanggal']}'),
+                        const SizedBox(height: 4.0),
+                        Text('Jenis Surat: ${item['Jenis Surat']}'),
+                        const SizedBox(height: 8.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () => _changeStatus(context, item), // Menangani tap untuk mengubah status
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                                decoration: BoxDecoration(
+                                  color: statusColor,
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: Text(
+                                  item['Status'] ?? '',
+                                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ),
+                            ElevatedButton(
+                              onPressed: () => _generateSurat(item), // Menangani tap untuk generate surat
+                              child: Text('Generate Surat'),
+                            ),
+                          ],
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
+                  );
+                },
+              ),
+            ),
+          ],
         ),
       ],
     );

@@ -100,7 +100,28 @@ class Google_Service_AdminBeranda {
     );
 
     final values = response.values ?? [];
-    return values.length; // Kembalikan jumlah baris sebagai total populasi
+
+    // Log data yang diterima untuk debugging
+    print('Data Total Population: $values');
+
+    // Pastikan bahwa data yang diambil diubah menjadi integer dengan benar
+    final totalPopulation = values
+        .where((row) => row.isNotEmpty) // Filter out empty rows
+        .map((row) {
+      // Guard against rows without data
+      if (row.isEmpty) {
+        print('Skipping empty row'); // Debug log
+        return 0;
+      }
+      final value = row[0] as String;
+      final parsedValue = int.tryParse(value) ?? 0;
+      return parsedValue;
+    })
+        .reduce((a, b) => a + b);
+
+    print('Total Population Calculated: $totalPopulation'); // Debug log
+
+    return totalPopulation;
   }
 
   // Fungsi untuk menghitung tingkat kesuksesan/berhasil

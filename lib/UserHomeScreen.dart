@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart'; // Mengimpor package Flutter Material
+import 'package:flutter/material.dart'; // Mengimpor paket Flutter Material
 import 'beranda_screen.dart'; // Mengimpor BerandaScreen
 import 'bantuan_screen.dart'; // Mengimpor BantuanScreen
 import 'history_screen.dart'; // Mengimpor HistoryScreen
@@ -17,13 +17,15 @@ class UserHomeScreen extends StatefulWidget {
 class _UserHomeScreenState extends State<UserHomeScreen> {
   int _selectedIndex = 0; // Menyimpan indeks tab yang dipilih
 
-  // Daftar halaman yang akan ditampilkan sesuai dengan tab yang dipilih
-  final List<Widget> _pages = [
-    BerandaScreen(username: 'username'), // Halaman Beranda
-    HistoryScreen(), // Halaman Riwayat
-    BantuanScreen(), // Halaman Bantuan
-    ProfileScreen(username: 'username'), // Halaman Profil
-  ];
+  // Fungsi untuk mendapatkan daftar halaman sesuai dengan tab yang dipilih, dengan username yang dioper dari widget
+  List<Widget> _pages(String username) {
+    return [
+      BerandaScreen(username: username), // Halaman Beranda
+      HistoryScreen(username: username), // Halaman Riwayat
+      BantuanScreen(), // Halaman Bantuan
+      ProfileScreen(username: username), // Halaman Profil
+    ];
+  }
 
   // Fungsi untuk menangani tap pada item BottomNavigationBar
   void _onItemTapped(int index) {
@@ -57,7 +59,7 @@ class _UserHomeScreenState extends State<UserHomeScreen> {
           ),
         ],
       ),
-      body: _pages[_selectedIndex], // Menampilkan halaman sesuai tab yang dipilih
+      body: _pages(widget.username)[_selectedIndex], // Menampilkan halaman sesuai tab yang dipilih dan username dari login
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
