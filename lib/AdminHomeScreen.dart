@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'admin_beranda_screen.dart';
-import 'admin_riwayat_screen.dart';
+import 'admin_DataMasuk_screen.dart';
 import 'admin_bantuan_screen.dart';
 import 'admin_profil_screen.dart';
 
