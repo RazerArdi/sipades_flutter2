@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart'; // Import the intl package
 
 class JadwalSholatScreen extends StatelessWidget {
   @override
@@ -26,7 +27,7 @@ class JadwalSholatScreen extends StatelessWidget {
               left: 0,
               right: 0,
               child: Container(
-                height: MediaQuery.of(context).size.height, // Set height to 40% of the screen height
+                height: MediaQuery.of(context).size.height * 0.4, // Adjust height to fit better
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("assets/images/masjid_background.png"),
@@ -82,7 +83,7 @@ class JadwalSholatScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text("Jumat, 30 Juni 2017 / 6 Syawal 1438"),
+                      Text(_getFormattedDate()), // Call the method to get today's date
                       SizedBox(height: 16.0),
                       _buildWaktuShalatItem("Subuh", "04:43 AM", true),
                       _buildWaktuShalatItem("Fajar", "06:04 AM", false),
@@ -99,6 +100,14 @@ class JadwalSholatScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Method to format the current date in Indonesian
+  String _getFormattedDate() {
+    DateTime now = DateTime.now(); // Get current date
+    // Set locale to Indonesian and format the date
+    String formattedDate = DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(now);
+    return formattedDate; // Return the formatted date
   }
 
   Widget _buildWaktuShalatItem(String waktu, String jam, bool isActive) {
