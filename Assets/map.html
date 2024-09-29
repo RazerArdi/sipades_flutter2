@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>OpenLayers Map</title>
+    <style>
+        html, body {
+          height: 100%;
+          margin: 0;
+          padding: 0;
+        }
+        #map {
+          width: 100%;
+          height: 100%;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/4.6.5/ol.js"></script>
+</head>
+<body>
+<div id="map" class="map"></div>
+<script type="text/javascript">
+    var map = new ol.Map({
+      target: 'map',
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        })
+      ],
+      view: new ol.View({
+        center: ol.proj.fromLonLat([-122.4194, 37.7749]), // San Francisco, CA
+        zoom: 12
+      })
+    });
+
+    // Add a marker to the map
+    var marker = new ol.Overlay({
+      position: ol.proj.fromLonLat([-122.4194, 37.7749]), // Marker position
+      positioning: 'center-center',
+      element: document.createElement('div'),
+      stopEvent: false
+    });
+    marker.getElement().style.width = '20px';
+    marker.getElement().style.height = '20px';
+    marker.getElement().style.backgroundColor = 'red';
+    marker.getElement().style.borderRadius = '50%';
+    map.addOverlay(marker);
+</script>
+</body>
+</html>
