@@ -27,7 +27,7 @@ class JadwalSholatScreen extends StatelessWidget {
               left: 0,
               right: 0,
               child: Container(
-                height: MediaQuery.of(context).size.height * 0.4, // Adjust height to fit better
+                height: MediaQuery.of(context).size.height, // Adjust height to fit better
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage("assets/images/masjid_background.png"),
@@ -83,7 +83,7 @@ class JadwalSholatScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(_getFormattedDate()), // Call the method to get today's date
+                      Text(_getFormattedDate()),
                       SizedBox(height: 16.0),
                       _buildWaktuShalatItem("Subuh", "04:43 AM", true),
                       _buildWaktuShalatItem("Fajar", "06:04 AM", false),
@@ -102,11 +102,11 @@ class JadwalSholatScreen extends StatelessWidget {
     );
   }
 
-  // Method to format the current date in Indonesian
+  // Method to format the current date
   String _getFormattedDate() {
     DateTime now = DateTime.now(); // Get current date
-    // Set locale to Indonesian and format the date
-    String formattedDate = DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(now);
+    // Format the date
+    String formattedDate = DateFormat('EEEE, dd MMMM yyyy').format(now);
     return formattedDate; // Return the formatted date
   }
 
